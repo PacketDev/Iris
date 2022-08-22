@@ -1,0 +1,102 @@
+{
+    "external": {
+        "type": "json",
+        "fileEnum": "MANIFEST__PRODUCTION"
+    },
+    "name": "Iris",
+    "version": 1,
+    "strings": [
+        {
+            "name": "__production__build",
+            "Currentstate": "STABLE"
+        },
+        {
+            "name": "__development__build",
+            "Currentstate": "UNSTABLE"
+        }
+    ],
+    "schema": {
+        "database": [
+            {
+                "db-name": null,
+                "db-password": null,
+                "db-ip": "127.0.0.1"
+            }
+        ],
+        "Iris": {
+            "ID": "IRIS",
+            "name": "Iris",
+            "version": "1.0.0",
+            "developer/author": "Packet",
+            "package": {
+                "mainEntryPoint": "index.js",
+                "scripts": {
+                    "start": "node index.js",
+                    "build": ""
+                },
+                "repository": {
+                    "type": "git",
+                    "url": "git+https://github.com/PacketDev/Iris.git"
+                  },
+                  "keywords": [
+                    "Discord"
+                  ],
+                  "license": "Apache-2.0",
+                  "bugs": {
+                    "url": "https://github.com/PacketDev/Iris/issues"
+                  },
+                  "homepage": "https://github.com/PacketDev/Iris#readme"
+            }
+        },
+        "server": {
+            "ID": "IRIS_SERVER",
+            "name": "Server",
+            "version": "1.0.2",
+            "config": {
+                "port": 3000,
+                "ws": 80,
+                "databaseURL": null
+            }
+        },
+        "web": {
+            "ID": "IRIS_WEB",
+            "name": "Public",
+            "version": "2.0.0",
+            "config": {
+                "main": "public/index.html",
+                "bUseLiveServer": true,
+                "port": 55000,
+                "ws": 443,
+                "layout": [
+                    "public/index.html",
+                    "public/register.html",
+                    "public/login.html",
+                    "public/group.html",
+                    "public/host.html",
+                    "public/create.html",
+                    "public/document.txt"
+                ]
+            }
+        },
+        "mobile": {
+            "ios": null,
+            "android": null
+        },
+        "windows": {
+            "support": [
+                "WIN_10",
+                "WIN_11",
+                "LNX",
+                "MAC",
+                "WIN_7"
+            ]
+        },
+        "frameworks": null,
+        "data": "iris/Enums.js",
+        "functions": "utils/functions.js",
+        "logger": [
+            "utils/Logger.js",
+            "DEFAULT_JAVASCRIPT"
+        ]
+    }
+}
