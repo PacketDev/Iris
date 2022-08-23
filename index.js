@@ -15,11 +15,13 @@ const ws = new WebSocketServer({
     port: process.env.WS || manifest.schema.server.config.ws
 }, IrisLogger.Debug.DEBUG(`Listening on Port ${manifest.schema.server.config.ws}`)); 
 
-ws.on("connection", client => {
-    client.on("message", (message, binary) => {
+ws.on("connection", wSocket => {
+    client.on("message", (message) => {
+       let a; 
+        
         [...ws.clients]
-            .filter(c => c !== client)
-            .forEach(c => c.send(binary ? message.toString() : message));
+            .filter(c => c !== wSocket)
+            .forEach(c => c.send(a ? message.toString() : message));
     });
 });
 
