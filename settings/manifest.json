@@ -79,24 +79,46 @@
             }
         },
         "mobile": {
-            "ios": null,
-            "android": null
+            "ios": [
+                {
+                    "name": "IOS",
+                    "defaultG": "IOS_DEFAULT_GATEWAY",
+                    "ID": "__IOS__PRODUCTION__BUILD__",
+                    "Currentstate": "UNSTABLE"
+                }
+            ],
+            "android": [
+                {
+                    "name": "ANDROID",
+                    "defaultG": "ANDROID_DEFAULT_GATEWAY",
+                    "ID": "__ANDROID__PRODUCTION__BUILD__",
+                    "Currentstate": "UNSTABLE"
+                }
+            ]
         },
         "windows": {
             "support": [
                 "WIN_10",
                 "WIN_11",
-                "LNX",
-                "MAC",
                 "WIN_7"
             ]
         },
+        "other": {
+            "support": [
+                "LNX",
+                "MAC"
+            ]
+        },
         "frameworks": null,
-        "data": "iris/Enums.js",
+        "data": "bin/Enums.js",
         "functions": "utils/functions.js",
         "logger": [
             "utils/Logger.js",
             "DEFAULT_JAVASCRIPT"
-        ]
+        ],
+        "IRIS_SDK": {
+            "version": "2.3.0",
+            "name": "iris/sdk"
+        }
     }
 }
