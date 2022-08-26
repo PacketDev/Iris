@@ -1,2 +1,2 @@
-# Iris
-Iris is a Website like discord built off websockets 
+# Iris V2
+Chat App based off Discord
