@@ -1,8 +1,3 @@
-const readline = require("readline").createInterface({
-    input: process.stdin,
-    output: process.stdin
-});
-
 class IrisLogger {
     color = {
         "White": `\x1b[0m`,

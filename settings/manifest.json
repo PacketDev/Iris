@@ -37,15 +37,15 @@
                 "repository": {
                     "type": "git",
                     "url": "git+https://github.com/PacketDev/Iris.git"
-                  },
-                  "keywords": [
+                },
+                "keywords": [
                     "Discord"
-                  ],
-                  "license": "Apache-2.0",
-                  "bugs": {
+                ],
+                "license": "Apache-2.0",
+                "bugs": {
                     "url": "https://github.com/PacketDev/Iris/issues"
-                  },
-                  "homepage": "https://github.com/PacketDev/Iris#readme"
+                },
+                "homepage": "https://github.com/PacketDev/Iris#readme"
             }
         },
         "server": {

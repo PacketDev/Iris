@@ -21,6 +21,8 @@
   "homepage": "https://github.com/PacketDev/Iris#readme",
   "dependencies": {
     "express": "^4.18.1",
+    "stream": "^0.0.2",
+    "uuid": "^9.0.0",
     "ws": "^8.8.1"
   }
 }
