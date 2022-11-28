@@ -1,4 +1,3 @@
-const { loadManifest } = require("./utils/functions");
 const manifest = require("./settings/manifest.json");
 
 const express = require("express");
@@ -7,12 +6,14 @@ const { WebSocketServer } = require("ws");
 const Logger = require("./utils/Logger");
 const IrisLogger = new Logger();
 
+const Program = require("./Server/Program");
+
 const ws = new WebSocketServer({
     port: process.env.WS || manifest.schema.server.config.ws
 }, IrisLogger.Debug.DEBUG(`Listening on Port ${manifest.schema.server.config.ws}`));
 
 ws.on("connection", wSocket => {
-    client.on("message", (message) => {
+    wSocket.on("message", (message) => {
         let a;
 
         [...ws.clients]
@@ -21,6 +22,4 @@ ws.on("connection", wSocket => {
     });
 });
 
-listener(app);
-
-loadManifest(manifest, "manifest");
+new Program().Start();

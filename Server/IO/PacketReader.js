@@ -13,6 +13,10 @@ class PacketReader {
     ReadMessage() {
         // TODO(Skies)
     }
+
+    Read() {
+        // TODO(Skies)
+    }
 }
 
 module.exports = PacketReader;

@@ -8,7 +8,7 @@ class Client {
         this.UUID = uuid();
         this._packet = new PacketReader(this.Socket);
 
-        var opcode = _packet.Read();
+        var opcode = this._packet.Read();
         let displayName = this._packet.ReadMessage();
 
         this.Logger = new IrisLogger();
