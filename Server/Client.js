@@ -13,7 +13,9 @@ class Client {
 
         this.Logger = new IrisLogger();
 
-        this.Logger.Debug.DEBUG(`Client Connected: ${displayName}`);
+        if (opcode) {
+            this.Logger.Debug.DEBUG(`Client Connected: ${displayName}`);
+        }
     }
 }
 

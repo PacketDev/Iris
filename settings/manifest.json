@@ -7,18 +7,19 @@
     "version": 1,
     "strings": [
         {
-            "name": "__production__build",
+            "name": "PRODUCTION",
             "Currentstate": "STABLE"
         },
         {
-            "name": "__development__build",
+            "name": "DEVELOPMENT",
             "Currentstate": "UNSTABLE"
         }
     ],
+    "build": "DEVELOPMENT",
     "schema": {
         "database": [
             {
-                "db-name": null,
+                "db-name": "MongoDB",
                 "db-password": null,
                 "db-ip": "127.0.0.1"
             }
@@ -27,7 +28,7 @@
             "ID": "IRIS",
             "name": "Iris",
             "version": "1.0.0",
-            "developer/author": "Packet",
+            "developer/author": "NotSkeislol",
             "package": {
                 "mainEntryPoint": "index.js",
                 "scripts": {
@@ -36,22 +37,22 @@
                 },
                 "repository": {
                     "type": "git",
-                    "url": "git+https://github.com/PacketDev/Iris.git"
+                    "url": "git+https://github.com/NotSkeislol/Iris.git"
                 },
                 "keywords": [
                     "Discord"
                 ],
                 "license": "Apache-2.0",
                 "bugs": {
-                    "url": "https://github.com/PacketDev/Iris/issues"
+                    "url": "https://github.com/NotSkeislol/Iris/issues"
                 },
-                "homepage": "https://github.com/PacketDev/Iris#readme"
+                "homepage": "https://github.com/NotSkeislol/Iris#readme"
             }
         },
         "server": {
             "ID": "IRIS_SERVER",
             "name": "Server",
-            "version": "1.0.2",
+            "version": "2.0.1",
             "config": {
                 "port": 3000,
                 "ws": 80,
@@ -113,12 +114,12 @@
         "data": "bin/Enums.js",
         "functions": "utils/functions.js",
         "logger": [
-            "utils/Logger.js",
-            "DEFAULT_JAVASCRIPT"
+            "utils/Logger.js"
         ],
         "IRIS_SDK": {
-            "version": "2.3.0",
-            "name": "iris/sdk"
+            "version": "3.0.0",
+            "name": "sdk",
+            "path": "../SDK"
         }
     }
 }
