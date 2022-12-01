@@ -3,7 +3,7 @@ const Logger = require("../../utils/logging/Logger");
 
 
 try {
-    mongoose.connect("mongodb://localhost:27017/Iris").then(() => {
+    mongoose.connect("mongodb+srv://<username>:<password>@cluster0.uu2fq13.mongodb.net/Iris?retryWrites=true&w=majority").then(() => {
         Logger.INFO("Connected to Database!");
     });
 } catch (err) {
