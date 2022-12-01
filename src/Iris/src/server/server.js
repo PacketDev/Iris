@@ -3,6 +3,7 @@ const Logger = require("../utils/logging/Logger");
 
 const register = require("./api/register");
 const login = require("./api/login");
+const discriminator = require("./api/discriminator");
 
 const app = express();
 
@@ -11,6 +12,7 @@ require("./Database/database");
 
 app.use(register);
 app.use(login);
+app.use(discriminator);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.post("/auth/v1/register", async (req, res) => {
-    const { email, username, password: text } = req.body;
+    const { email, username, password: text, discriminator } = req.body;
 
     if (!username || typeof username !== "string") {
         return res.json({ error: "Invalid Username, Please enter the valid username." });
@@ -20,16 +20,19 @@ app.post("/auth/v1/register", async (req, res) => {
             error: "Password too short. your password shhould be atleast 6 characters"
         })
     }
-
     const password = await bcrypt.hash(text, 10)
 
     try {
-        await User.create({
+        const user = await new User({
             email,
-            username,
-            password
-        })
-        Logger.INFO("Successfully Created User.");
+            password,
+            username
+        });
+
+        user.save().then(() => {
+            res.redirect("/auth/v1/login");
+            Logger.INFO("Successfully created Account.");
+        }).catch(err => Logger.ERROR(err));
     } catch (err) {
         if (err.code === 11000) {
             return res.json({ error: "Username is taken." })
