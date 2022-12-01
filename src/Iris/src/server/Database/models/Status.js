@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
 
 const statusSchema = new mongoose.Schema({
-    dnd: Boolean,
-    offline: Boolean,
-    online: Boolean
+    dnd: {
+        type: Boolean
+    },
+    offline: {
+        type: Boolean
+    },
+    online: {
+        type: Boolean
+    }
 });
 
 module.exports = mongoose.model("status", statusSchema);

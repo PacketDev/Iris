@@ -1,12 +1,24 @@
 const mongoose = require("mongoose");
 
 const friendSchema = new mongoose.Schema({
-    username: String,
-    discriminator: String,
-    nickname: String,
-    bio: String,
-    bannerURL: String,
-    avatarURL: String
+    username: {
+        type: String,
+    },
+    discriminator: {
+        type: String,
+    },
+    nickname: {
+        type: String,
+    },
+    bio: {
+        type: String,
+    },
+    bannerURL: {
+        type: String,
+    },
+    avatarURL: {
+        type: String,
+    },
 });
 
 module.exports = mongoose.model("friend", friendSchema);

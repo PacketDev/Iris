@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
 
 const presenceSchema = new mongoose.Schema({
-    body: String,
-    emoji: Boolean,
-    clear: Date
+    body: {
+        type: String
+    },
+    emoji: {
+        type: Boolean
+    },
+    clear: {
+        type: Date
+    }
 });
 
 module.exports = mongoose.model("presence", presenceSchema);
