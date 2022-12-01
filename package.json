@@ -1,0 +1,26 @@
+{
+  "name": "iris",
+  "version": "0.1.0",
+  "description": "Iris is a Desktop Chat app",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/app.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NotSkieslol/Iris.git"
+  },
+  "keywords": [
+    "Desktop",
+    "ChatApp"
+  ],
+  "author": "NotSkieslol",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/NotSkieslol/Iris/issues"
+  },
+  "homepage": "https://github.com/NotSkieslol/Iris#readme",
+  "dependencies": {
+    "electron": "^22.0.0"
+  }
+}
