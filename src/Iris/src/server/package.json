@@ -25,6 +25,7 @@
   "homepage": "https://github.com/NotSkieslol/Iris#readme",
   "dependencies": {
     "express": "^4.18.2",
+    "mongodb": "^4.12.1",
     "mongoose": "^6.7.5",
     "ws": "^8.11.0"
   }
