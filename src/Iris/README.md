@@ -1,2 +1,2 @@
-# BetaCord - App
-This is the main directory for the beta cord desktop app
+# Iris - Backend
+Iris's Backend
