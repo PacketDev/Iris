@@ -8,32 +8,26 @@ const app = express.Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post("/auth/v1/login", (req, res) => {
-    // go fuck yourself please do
-    // User.find({ $or: [{ email: req.body.email }] }).then((user) => {
-    //     if (user) {
-    //         bcrypt.compare(password, user.password, (err, data) => {
-    //             if (err) {
-    //                 res.json({ error: err });
-    //             }
+app.post("/auth/v1/login", async (req, res) => {
+    const { email, password } = req.body;
 
-    //             if (data) {
-    //                 let token = jsonwebtoken.sign({
-    //                     username: user.email
-    //                 }, "skieslol");
+    const user = await User.findOne({ email }).lean();
 
-    //                 res.json({
-    //                     message: "Successfully Logged in.",
-    //                     token
-    //                 });
-    //             } else {
-    //                 res.json({ message: "Login or Password is invalid." })
-    //             }
-    //         });
-    //     } else {
-    //         res.json({ message: "Failed to Find User." });
-    //     }
-    // });
+    if (!user) {
+        return res.json({ error: "Invalid Email/Password." });
+    }
+
+    if (await bcrypt.compare(password, user.password)) {
+        let token = jsonwebtoken.sign({
+            id: user._id,
+            email: user.email,
+            password: user.password
+        }, "Iris");
+
+        return res.json({ data: token });
+    }
+
+    res.json({ error: "Invalid Email/Password" });
 });
 
 module.exports = app;
