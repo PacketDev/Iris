@@ -1,13 +1,15 @@
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { GuildChannelStyle } from "../styles/styles";
+import { GuildPanel } from "../components/guilds/GuildPanel"
 
 export const GuildChannel = () => {
+    const { id } = useParams();
 
-    console.log(useSearchParams());
+    console.log(id);
 
     return (
         <GuildChannelStyle>
-            Guild Channel
+            {!id && <GuildPanel />}
         </GuildChannelStyle>
     );
 }
