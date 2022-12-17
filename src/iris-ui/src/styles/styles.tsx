@@ -1,8 +1,10 @@
-import styled, { css } from "styled-components";
-import { PageProps } from "./styleTypes";
+import styled, { css } from 'styled-components';
+import { PageProps } from './styleTypes';
+
+export const SIDEBAR_WIDTH = 400;
 
 export const InputField = styled.input`
-  font-family: "Inter";
+  font-family: 'Inter';
   outline: none;
   border: none;
   background-color: inherit;
@@ -33,7 +35,7 @@ export const Button = styled.button`
   width: 100%;
   outline: none;
   border: none;
-  font-family: "Inter";
+  font-family: 'Inter';
   font-size: 16px;
   background-color: #2b09ff;
   color: #fff;
@@ -63,11 +65,49 @@ export const GuildSidebarStyle = styled.div`
   top 0;
   left: 0;
   height: 100%;
-  width: 350px;
-  background-color: #1f1f1f;
+  width: ${SIDEBAR_WIDTH}px;
+  background-color: #1a1a1a;
+  border-right: 1px solid #5454542d;
+  overflow-y: scroll;
+   &::-webkit-scrollbar {
+    display: none;
+    /* width: 10px;
+    height: 5px;
+    background-color: #2d2d2d; */
+  }
+  `;
+
+export const GuildSidebarHeader = styled.header`
+  position: fixed;
+  width: ${SIDEBAR_WIDTH}px;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 32px;
+  box-sizing: border-box;
+  background: #151515;
+  height: 100px;
+  border-bottom: 1px solid #5454542d;
+  & h1 {
+    font-weight: 400;
+  }
 `;
 
 export const GuildChannelStyle = styled.div`
   height: 100%;
-  margin-left: 350px;
-`
+  margin-left: ${SIDEBAR_WIDTH}px;
+`;
+
+export const GuildSidebarContainer = styled.div``;
+
+export const GuildSidebarItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 32px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #5454542d;
+  background-color: #131313;
+`;
