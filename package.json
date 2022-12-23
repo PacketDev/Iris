@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NotSkieslol/Iris.git"
+    "url": "git+https://github.com/Skiesuwu/Iris.git"
   },
   "keywords": [
     "Desktop",
@@ -17,9 +17,9 @@
   "author": "NotSkieslol",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/NotSkieslol/Iris/issues"
+    "url": "https://github.com/Skiesuwu/Iris/issues"
   },
-  "homepage": "https://github.com/NotSkieslol/Iris#readme",
+  "homepage": "https://github.com/Skiesuwu/Iris#readme",
   "dependencies": {
     "@types/react-router-dom": "^5.3.3",
     "@types/styled-components": "^5.1.26",
