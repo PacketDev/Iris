@@ -2,6 +2,7 @@ const User = require('../Database/models/User');
 const bcrypt = require('bcryptjs');
 const express = require('express');
 const jsonwebtoken = require('jsonwebtoken');
+const Logger = require('../../utils/logging/Logger');
 
 const app = express.Router();
 
@@ -9,32 +10,32 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.post('/auth/v1/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
-  const user = await User.findOne({ email }).lean();
+  const user = await User.findOne({ username });
 
-  if (!user) {
-    return res.json({ error: 'Invalid Email/Password.' });
+  try {
+    if (!user) {
+      return res.json({
+        msg: 'Incorrect username or password.',
+        status: false,
+      });
+    }
+
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
+      return res.json({
+        msg: 'Incorrect username or password.',
+        status: false,
+      });
+    }
+
+    delete user.password;
+    return res.json({ status: true, user });
+  } catch (err) {
+    throw Logger.ERROR(err);
   }
-
-  if (await bcrypt.compare(password, user.password)) {
-    var token = jsonwebtoken.sign(
-      {
-        id: user._id,
-        email: user.email,
-        password: user.password,
-      },
-      'Iris'
-    );
-
-    res.status(200);
-    res.json({ message: 'Logged in!' });
-  } else {
-    res.status(203);
-    res.json({ error: 'Invalid Email/Password' });
-  }
-
-  console.log(token);
 });
 
 module.exports = app;

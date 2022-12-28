@@ -1,9 +1,9 @@
-const electron = require("electron");
-const { join } = require("path");
+const electron = require('electron');
+const { join } = require('path');
 
 const original = process.env.ORIGINAL_PRELOAD;
-const Logger = require("../utils/logging/Logger");
-const updater = require("../core/updater");
+const Logger = require('../utils/logging/Logger');
+const updater = require('../core/updater');
 
 module.exports = new (class ElectronBrowserWindow {
   constructor(
@@ -17,24 +17,24 @@ module.exports = new (class ElectronBrowserWindow {
   ) {
     function createWindow() {
       const window = new electron.BrowserWindow({
-        width: 900,
-        height: 720,
-        icon: "./assets/icon.ico",
+        width: 960,
+        height: 540,
+        autoHideMenuBar: true,
         webPreferences: {
-          preload: join(__dirname, "../", "renderer", "preload.js"),
+          preload: join(__dirname, 'preload', 'preload.js'),
           sandbox: false,
         },
       });
 
-      Logger.INFO("Created BrowserWindow.");
+      Logger.INFO('Created BrowserWindow.');
 
-      window.loadURL("http://localhost");
+      window.loadURL('http://localhost:3000/login');
     }
 
     electron.app.whenReady().then(() => {
       createWindow();
 
-      electron.app.on("activate", () => {
+      electron.app.on('activate', () => {
         if (electron.BrowserWindow.getAllWindows().length === 0) {
           createWindow();
         }

@@ -5,51 +5,95 @@ import {
   InputLabel,
 } from '../../styles/styles';
 import styles from './main.module.scss';
-import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+import { registerEndpoint } from '../../utils/API';
 
 export const RegisterForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const [payload, setPayload] = useState({
+    email: '',
+    username: '',
+    password: '',
+  });
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [error, setError] = useState('');
+  const toastNotificationData: object = {
+    position: 'bottom-right',
+    autoClose: 7000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: 'dark',
+  };
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const navigate = useNavigate();
 
-    const ohnutest = { username, email, password };
+  useEffect(() => {
+    if (localStorage.getItem('iris-app')) {
+      navigate('/guilds');
+    }
+  }, []);
 
-    fetch('http://localhost:7070/auth/v1/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(ohnutest),
-    }).then((e) => {
-      console.warn(JSON.stringify(e.json()));
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
 
-      if (e.status === 404) {
-        setError('Failed to find endpoint.');
+    if (handleValidation()) {
+      const { password, username, email } = payload;
+      const { data } = await axios.post(registerEndpoint, {
+        email,
+        username,
+        password,
+      });
+
+      if (data.status === false) {
+        toast.error(data.msg, toastNotificationData);
       }
-      console.log('Error');
-    });
+
+      if (data.status === true) {
+        localStorage.setItem('iris-app', JSON.stringify(data.user));
+        navigate('/login');
+
+        toast.info('Created Account.', toastNotificationData);
+      }
+    }
+  };
+
+  const handleValidation = () => {
+    const { password, email, username } = payload;
+
+    if (username.length < 3) {
+      toast.error(
+        'Username should be greater than 3 characters.',
+        toastNotificationData
+      );
+      return false;
+    } else if (password.length < 8) {
+      toast.error(
+        'Password should be greater than 8 characters.',
+        toastNotificationData
+      );
+      return false;
+    } else if (email === '') {
+      toast.error('Email is required.', toastNotificationData);
+      return false;
+    }
+    return true;
+  };
+
+  const handleChange = (event: any) => {
+    setPayload({ ...payload, [event.target.name]: event.target.value });
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+    <form className={styles.form} onSubmit={(event) => handleSubmit(event)}>
       <InputContainer>
         <InputLabel htmlFor="email">Email</InputLabel>
         <InputField
           type="email"
-          id="email"
-          {...register('email', { required: true })}
+          placeholder="Email"
+          name="email"
+          onChange={(e: any) => handleChange(e)}
         />
       </InputContainer>
       <section className={styles.nameFieldRow}>
@@ -57,8 +101,9 @@ export const RegisterForm = () => {
           <InputLabel htmlFor="username">Username</InputLabel>
           <InputField
             type="text"
-            id="username"
-            {...register('username', { required: true })}
+            placeholder="Username"
+            name="username"
+            onChange={(e: any) => handleChange(e)}
           />
         </InputContainer>
       </section>
@@ -66,8 +111,9 @@ export const RegisterForm = () => {
         <InputLabel htmlFor="password">Password</InputLabel>
         <InputField
           type="password"
-          id="password"
-          {...register('password', { required: true })}
+          placeholder="Password"
+          name="password"
+          onChange={(e: any) => handleChange(e)}
         />
       </InputContainer>
       <Button className={styles.button}>Create Account</Button>
@@ -77,6 +123,7 @@ export const RegisterForm = () => {
           <span>Login</span>
         </Link>
       </div>
+      <ToastContainer />
     </form>
   );
 };

@@ -6,54 +6,95 @@ import {
 } from '../../styles/styles';
 import styles from './main.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+import { loginEndpoint } from '../../utils/API';
 
 export const LoginForm = () => {
-  const [error, setError] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [payload, setPayload] = useState({
+    username: '',
+    password: '',
+  });
+
+  const toastNotificationData: object = {
+    position: 'bottom-right',
+    autoClose: 7000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: 'dark',
+  };
 
   const navigate = useNavigate();
 
-  const payload = { email, password };
-
-  const onSubmit = async (data: any) => {
-    data.preventDefault();
-
-    fetch('http://localhost:7070/auth/v1/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    }).then((e) => {
-      console.log(e);
-    });
-
-    try {
+  useEffect(() => {
+    if (localStorage.getItem('iris-app')) {
       navigate('/guilds');
-    } catch (err) {
-      console.error(err);
+      
+    }
+  }, []);
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+
+    if (handleValidation()) {
+      const { password, username } = payload;
+      const { data } = await axios.post(loginEndpoint, {
+        username,
+        password,
+      });
+
+      if (data.status === false) {
+        toast.error(data.msg, toastNotificationData);
+      }
+
+      if (data.status === true) {
+        localStorage.setItem('iris-app', JSON.stringify(data.user));
+        toast.info('Logged In.', toastNotificationData);
+
+        navigate('/guilds');
+      }
     }
   };
 
+  const handleValidation = () => {
+    const { password, username } = payload;
+
+    if (username === '') {
+      toast.error('Username & Password is required.', toastNotificationData);
+      return false;
+    } else if (password === '') {
+      toast.error('Username & Password is required.', toastNotificationData);
+    }
+    return true;
+  };
+
+  const handleChange = (event: any) => {
+    setPayload({ ...payload, [event.target.name]: event.target.value });
+  };
+
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
+    <form className={styles.form} onSubmit={(event) => handleSubmit(event)}>
+      <section className={styles.nameFieldRow}>
+        <InputContainer>
+          <InputLabel htmlFor="username">Username</InputLabel>
+          <InputField
+            type="text"
+            placeholder="Username"
+            name="username"
+            onChange={(e: any) => handleChange(e)}
+            min="3"
+          />
+        </InputContainer>
+      </section>
       <InputContainer>
-        <InputLabel htmlFor="email">Email</InputLabel>
-        <InputField
-          type="email"
-          value={email}
-          required
-          onChange={(e: any) => setEmail(e.target.value)}
-        />
-      </InputContainer>
-      <InputContainer className={styles.loginFormPassword}>
         <InputLabel htmlFor="password">Password</InputLabel>
         <InputField
           type="password"
-          value={password}
-          onChange={(e: any) => setPassword(e.target.value)}
+          placeholder="Password"
+          name="password"
+          onChange={(e: any) => handleChange(e)}
         />
       </InputContainer>
       <Button className={styles.button}>Login</Button>
@@ -63,6 +104,7 @@ export const LoginForm = () => {
           <span>Register</span>
         </Link>
       </div>
+      <ToastContainer />
     </form>
   );
 };

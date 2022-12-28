@@ -15,6 +15,14 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  setAvatarImage: {
+    type: Boolean,
+    default: false,
+  },
+  avatarURL: {
+    type: String,
+    default: '',
+  },
 });
 
 module.exports = mongoose.model('user', userSchema);
