@@ -16,7 +16,6 @@ type Props = {
 export const GuildSidebar: React.FC<Props> = ({ guilds }) => {
   const navigate = useNavigate();
 
-
   return (
     <GuildSidebarStyle>
       <GuildSidebarHeader>

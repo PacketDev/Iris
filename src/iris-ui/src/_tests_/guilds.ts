@@ -2,8 +2,8 @@ import { GuildType } from '../types';
 
 export default [
   {
-    id: 1,
-    username: "Sky's Server",
+    id: null,
+    username: '',
   },
   {
     id: 2,

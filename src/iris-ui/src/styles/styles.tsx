@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import { PageProps } from './styleTypes';
 
 export const SIDEBAR_WIDTH = 400;
+export const NAVBAR_WIDTH = 0;
 
 export const InputField = styled.input`
   font-family: 'Inter';
@@ -87,12 +88,18 @@ export const GuildSidebarHeader = styled.header`
   align-items: center;
   padding: 0 32px;
   box-sizing: border-box;
-  background: #151515;
+  background: #000000f1;
   height: 100px;
-  border-bottom: 1px solid #5454542d;
+  border-bottom: 1px solid #000000f1;
   & h1 {
     font-weight: 400;
   }
+`;
+
+export const GuildChannelNavbarStyle = styled.nav`
+  height: 100%;
+  
+  margin-left: 1210px;
 `;
 
 export const GuildChannelStyle = styled.div`
@@ -108,8 +115,8 @@ export const GuildSidebarItem = styled.div`
   gap: 20px;
   padding: 18px 32px;
   box-sizing: border-box;
-  border-bottom: 1px solid #5454542d;
-  background-color: #131313;
+  border-bottom: 1px solid #000000f1;
+  background-color: #000000f1;
 `;
 
 export const FormContainer = styled.div`
@@ -142,4 +149,13 @@ export const FormContainer = styled.div`
       border: 0.4rem solid ##4e0eff;
     }
   }
+`;
+
+export const OverlayContainer = styled.div`
+  background-color: #c;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
