@@ -16,11 +16,6 @@ type Props = {
 export const GuildSidebar: React.FC<Props> = ({ guilds }) => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (localStorage.getItem('iris-app') !== null) {
-      return navigate('/register');
-    }
-  });
 
   return (
     <GuildSidebarStyle>

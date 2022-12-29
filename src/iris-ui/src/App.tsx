@@ -5,7 +5,6 @@ import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Avatar } from './pages/Avatar';
-import { PrivateRoute } from './pages/PrivateRoute';
 
 function App() {
   return (
@@ -15,14 +14,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/avatar/set" element={<Avatar />} />
-        <Route
-          path="guilds"
-          element={
-            <PrivateRoute>
-              <Guild />
-            </PrivateRoute>
-          }
-        >
+        <Route path="guilds" element={<Guild />}>
           <Route path=":id" element={<GuildChannel />} />
         </Route>
       </Routes>

@@ -10,18 +10,11 @@ export const Guild = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (localStorage.getItem('iris-app') !== null) {
-      return navigate('/register');
-    }
-  });
 
   return (
     <Page>
       <GuildSidebar guilds={guilds} />
       {!id && <GuildPanel />}
-
-      {localStorage.getItem('iris-app') !== null}
       <Outlet />
     </Page>
   );
