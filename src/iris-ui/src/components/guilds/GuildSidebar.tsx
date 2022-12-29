@@ -7,6 +7,7 @@ import {
 import { GuildType } from '../../types';
 import styles from './main.module.scss';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 type Props = {
   guilds: GuildType[];
@@ -14,6 +15,12 @@ type Props = {
 
 export const GuildSidebar: React.FC<Props> = ({ guilds }) => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem('iris-app') !== null) {
+      return navigate('/register');
+    }
+  });
 
   return (
     <GuildSidebarStyle>

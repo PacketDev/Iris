@@ -1,9 +1,6 @@
-import { GuildChannelStyle } from "../../styles/styles";
+import { useEffect } from 'react';
+import { GuildChannelStyle } from '../../styles/styles';
 
 export const GuildPanel = () => {
-    return (
-        <GuildChannelStyle>
-            Guild Panel
-        </GuildChannelStyle>
-    );
-}
+  return <GuildChannelStyle>Guild Panel</GuildChannelStyle>;
+};
