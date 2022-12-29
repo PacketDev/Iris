@@ -13,7 +13,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/avatar" element={<Avatar />} />
+        <Route path="/avatar/set" element={<Avatar />} />
         <Route path="guilds" element={<Guild />}>
           <Route path=":id" element={<GuildChannel />} />
         </Route>

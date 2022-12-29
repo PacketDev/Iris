@@ -111,3 +111,35 @@ export const GuildSidebarItem = styled.div`
   border-bottom: 1px solid #5454542d;
   background-color: #131313;
 `;
+
+export const FormContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 3rem;
+  .title-container {
+    h1 {
+      color: white;
+    }
+  }
+  .avatars {
+    display: flex;
+    gap: 2rem;
+    .avatar {
+      border: 0.4rem solid transparent;
+      padding: 0.4rem;
+      border-radius: 5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 0.5s ease-in-out;
+      img {
+        height: 6rem;
+      }
+    }
+    .selected {
+      border: 0.4rem solid ##4e0eff;
+    }
+  }
+`;
