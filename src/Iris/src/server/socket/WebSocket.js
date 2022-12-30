@@ -1,5 +1,5 @@
 const { WebSocketServer } = require("ws");
-const Logger = require("../../utils/logging/Logger");
+const Logger = require("../utils/logging/Logger");
 
 const wss = new WebSocketServer({
     port: 443,

@@ -2,7 +2,7 @@ const User = require('../Database/models/User');
 const bcrypt = require('bcryptjs');
 const express = require('express');
 const jsonwebtoken = require('jsonwebtoken');
-const Logger = require('../../utils/logging/Logger');
+const Logger = require('../utils/logging/Logger');
 
 const app = express.Router();
 
