@@ -9,7 +9,7 @@ const cors = require('cors');
 
 const app = express();
 const path = require('path');
-const port = 8080 || process.env.port
+const port = process.env.PORT || 8080
 require('./socket/WebSocket');
 require('./Database/database');
 
