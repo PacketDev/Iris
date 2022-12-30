@@ -9,7 +9,7 @@ const cors = require('cors');
 
 const app = express();
 const path = require('path');
-
+const port = 8080 || process.env.port
 require('./socket/WebSocket');
 require('./Database/database');
 
@@ -23,6 +23,6 @@ app.use(login);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.listen(7070, () => {
-  Logger.INFO('Now Listening on Port 7070');
+app.listen(port, () => {
+  Logger.INFO(`Now Listening on Port ` + port);
 });
