@@ -1,34 +1,37 @@
 {
-  "name": "iris",
+  "name": "server",
   "version": "0.1.0",
-  "description": "Iris is a Desktop Chat app",
-  "main": "index.js",
+  "description": "Iris's Backend Server",
+  "main": "server.js",
   "scripts": {
-    "start": "ts-node src/app.ts"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Skiesuwu/Iris.git"
+    "url": "git+https://github.com/NotSkieslol/Iris.git"
   },
   "keywords": [
+    "Iris",
     "Desktop",
-    "ChatApp"
+    "ChatApp",
+    "Backend"
   ],
   "author": "NotSkieslol",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/Skiesuwu/Iris/issues"
+    "url": "https://github.com/NotSkieslol/Iris/issues"
   },
-  "homepage": "https://github.com/Skiesuwu/Iris#readme",
+  "homepage": "https://github.com/NotSkieslol/Iris#readme",
   "dependencies": {
-    "@types/react-router-dom": "^5.3.3",
-    "@types/styled-components": "^5.1.26",
     "bcryptjs": "^2.4.3",
-    "crypto": "^1.0.1",
-    "electron": "^22.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "react-hook-form": "^7.40.0",
-    "react-router-dom": "^6.4.4",
-    "sass": "^1.56.1"
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "^4.12.1",
+    "mongoose": "^6.7.5",
+    "nodemon": "^2.0.20",
+    "socket.io": "^4.5.4",
+    "ws": "^8.11.0"
   }
 }
