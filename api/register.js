@@ -44,11 +44,12 @@ app.post('/auth/v1/register', async (req, res) => {
     return res.json({ status: true, user });
   } catch (err) {
     if (err.code === 11000) {
-      return res.json({ error: 'Username is taken.', status: false });
+      return res.json({ error: 'Username is taken.', status: 422 });
     }
-    throw Logger.ERROR(err);
+    res.sendStatus(500); // Something went wrong
+    Logger.ERROR(err);
   }
 
-  res.json({ message: 'successful' });
+  res.json({ message: 'successful', status: 200 });
 });
 module.exports = app;

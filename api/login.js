@@ -34,7 +34,8 @@ app.post('/auth/v1/login', async (req, res) => {
     delete user.password;
     return res.json({ status: true, user });
   } catch (err) {
-    throw Logger.ERROR(err);
+    res.sendStatus(400); // Bad request
+    Logger.ERROR(err);
   }
 });
 

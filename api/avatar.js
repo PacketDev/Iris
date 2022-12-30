@@ -21,6 +21,7 @@ app.post('/setAvatar/:id', async (req, res) => {
       image: userData.avatarURL,
     });
   } catch (err) {
+    res.sendStatus(400); // Bad request
     Logger.ERROR(err);
   }
 });

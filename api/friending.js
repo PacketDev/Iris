@@ -24,6 +24,7 @@ app.post('/friend/pending', async (req, res) => {
       isFriendRequestAccepted: user.isFriendRequestAccepted,
     });
   } catch (err) {
+    res.sendStatus(400); // Bad request
     Logger.ERROR(err);
   }
 });
