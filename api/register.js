@@ -19,7 +19,7 @@ const ERR_PASWD = "Invalid password, please enter a valid password.";
 const ERR_TAKEN = "Username is taken or email is already registered.";
 /*********************************** */
 
-app.post("/auth/v0/register", async (req, res) => {
+app.post("/api/v0/auth/register", async (req, res) => {
   const { email, username, password: text } = req.body;
   if (!email || typeof email !== "string" || !email__regex.test(email)) {
     return res.json({

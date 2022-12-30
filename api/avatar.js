@@ -7,7 +7,7 @@ const app = express.Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post('/setAvatar/:id', async (req, res) => {
+app.post('/api/v0/setAvatar/:id', async (req, res) => {
   try {
     const userId = req.params.id;
     const avatarURL = req.body.image;

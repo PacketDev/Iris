@@ -10,7 +10,7 @@ const app = express.Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post("/auth/v0/login", async (req, res) => {
+app.post("/api/v0/auth/login", async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username });
 

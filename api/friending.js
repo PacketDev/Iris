@@ -7,7 +7,7 @@ const app = express.Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post('/friend/pending', async (req, res) => {
+app.post('/api/v0/friend/pending', async (req, res) => {
   try {
     const { userId } = req.body;
 
