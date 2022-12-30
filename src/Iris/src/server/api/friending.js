@@ -7,18 +7,21 @@ const app = express.Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post('/setAvatar/:id', async (req, res) => {
+app.post('/friend/pending', async (req, res) => {
   try {
-    const userId = req.params.id;
-    const avatarURL = req.body.image;
-    const userData = await User.findByIdAndUpdate(userId, {
-      isSet: true,
-      avatarURL,
-      image: avatarURL,
+    const { userId } = req.body;
+
+    const user = User.findOne(userId, {
+      isFriendRequestPending: true,
+      isFriendRequestAccepted: false,
+      id: userId,
     });
+
+    Logger.INFO(userId);
+
     return res.json({
-      isSet: userData.setAvatarImage,
-      image: userData.avatarURL,
+      isFriendRequestPending: user.isFriendRequestPending,
+      isFriendRequestAccepted: user.isFriendRequestAccepted,
     });
   } catch (err) {
     Logger.ERROR(err);

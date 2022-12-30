@@ -2,6 +2,8 @@ const express = require('express');
 const Logger = require('../utils/logging/Logger');
 
 const register = require('./api/register');
+const avatar = require('./api/avatar');
+const friending = require('./api/friending');
 const login = require('./api/login');
 const cors = require('cors');
 
@@ -14,6 +16,8 @@ require('./Database/database');
 app.use(cors());
 
 app.use(register);
+app.use(avatar);
+app.use(friending);
 app.use(login);
 
 app.use(express.json());
