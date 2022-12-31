@@ -1,6 +1,7 @@
 import express from "express";
 import config from "./config/config.json";
 import Logger from "./utils/Logger";
+import { wss } from "./socket/WebSocket";
 import createDatabase from "./Database/DB";
 import cors from "cors";
 
@@ -38,8 +39,14 @@ app.use(express.urlencoded({ extended: false }));
 
 createDatabase();
 
-require("./socket/WebSocket");
-
 app.listen(port, () => {
   Logger.INFO(`Iris:Server running on port [${port}]`);
+});
+
+// Register the WebSocket as a service
+// @ts-ignore
+app.on("upgrade", (request, socket, head) => {
+  wss.handleUpgrade(request, socket, head, (websocket: any) => {
+    wss.emit("connection", websocket, request);
+  });
 });
