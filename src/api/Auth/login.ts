@@ -16,7 +16,7 @@ app.post('/api/v0/auth/login', async (req, res) => {
 
   try {
     if (!user) {
-      return res.json({
+      return res.status(403).json({
         message: config.generic,
         status: false,
       });
@@ -25,7 +25,7 @@ app.post('/api/v0/auth/login', async (req, res) => {
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      return res.json({
+      return res.status(403).json({
         message: config.generic,
         status: false,
       });

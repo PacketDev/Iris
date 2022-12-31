@@ -82,9 +82,9 @@ app.post("/api/v0/auth/register", async (req, res) => {
   } catch (err: any) {
   Logger.WARN(err);
     if (err.code === 11000) {
-      return res.json({ error: ERR_TAKEN, status: false });
+      return res.status(406).json({ error: ERR_TAKEN, status: false });
     }
-    res.sendStatus(500); // Something went wro
+    res.sendStatus(500); // Something went wrong
     throw ERROR(err.code);
   }
 
