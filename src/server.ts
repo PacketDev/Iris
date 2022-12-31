@@ -5,34 +5,45 @@ import { wss } from "./socket/WebSocket";
 import createDatabase from "./Database/DB";
 import cors from "cors";
 
-// endpoints
-import register from "./api/Auth/register";
-import login from "./api/Auth/login";
-import create from "./api/Friend/create";
-import pending from "./api/Friend/pending";
-import about from "./api/User/About";
-import conversations from "./api/Conversations/Base";
-import conversations__ID from "./api/Conversations/UID";
-import conversations__Time from "./api/Conversations/UNIX";
-import avatar from "./api/User/Avatar";
-import status from "./api/User/Status";
-import UID from "./api/User/UID";
-
 const app = express();
 const port = process.env.PORT || config.port;
 app.use(cors());
 
-app.use(register);
-app.use(login);
-app.use(create);
-app.use(pending);
-app.use(about);
-app.use(avatar);
-app.use(conversations);
-app.use(conversations__ID);
-app.use(conversations__Time);
-app.use(status);
-app.use(UID);
+import Login from "./api/Auth/login";
+import Register from "./api/Auth/register";
+import CBase from "./api/Conversations/Base";
+import CID from "./api/Conversations/UID";
+import CNIX from "./api/Conversations/UNIX";
+import CFND from "./api/Friend/create";
+import OFND from "./api/Friend/outgoing";
+import PFND from "./api/Friend/pending";
+import GDEL from "./api/Guild/Delete";
+import GEDT from "./api/Guild/Edit";
+import GMSG from "./api/Guild/Message";
+import UABT from "./api/User/About";
+import UAVT from "./api/User/Avatar";
+import USTS from "./api/User/Status";
+import URID from "./api/User/UID";
+
+app.use([
+  Login,
+  Register,
+  CBase,
+  CID,
+  CNIX,
+  CFND,
+  OFND,
+  PFND,
+  GDEL,
+  GEDT,
+  GMSG,
+  UABT,
+  UAVT,
+  USTS,
+  URID,
+]);
+
+app.use(Login);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
