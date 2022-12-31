@@ -39,13 +39,13 @@ app.use(express.urlencoded({ extended: false }));
 
 createDatabase();
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   Logger.INFO(`Iris:Server running on port [${port}]`);
 });
 
 // Register the WebSocket as a service
 // @ts-ignore
-app.on("upgrade", (request, socket, head) => {
+server.on("upgrade", (request, socket, head) => {
   wss.handleUpgrade(request, socket, head, (websocket: any) => {
     wss.emit("connection", websocket, request);
   });
