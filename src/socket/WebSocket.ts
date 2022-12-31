@@ -1,18 +1,15 @@
-import WebSocket, { WebSocketServer } from 'ws';
-import Logger, { ERROR, WARN } from '../utils/Logger';
+import { WebSocketServer } from "ws";
+import Logger from "../utils/Logger";
 
-const wss = new WebSocketServer(
-  {
-    port: 443,
-  },
-  () => Logger('WebSocket is running.')
-);
+const wss = new WebSocketServer({
+  noServer: true,
+});
 
-wss.on('connection', (connection) => {
-  Logger('Client Connected.');
+wss.on("connection", (connection) => {
+  Logger.INFO("Client Connected.");
 
-  connection.on('message', (msg) => {
-    Logger(`[WebSocket]: ${msg.toString()}`);
+  connection.on("message", (msg) => {
+    Logger.INFO(`[WebSocket]: ${msg.toString()}`);
   });
 });
 
