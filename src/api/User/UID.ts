@@ -21,10 +21,7 @@ app.post("/api/v0/user/:userID", async (req, res) => {
 
   try {
     if (!user || !UID) {
-      return res.json({
-        message: ERR_NOTFOUND,
-        status: false,
-      });
+      return res.status(404).json(Error(ERR_NOTFOUND));
     }
     return res.json({
       avatar: user.avatar,

@@ -1,6 +1,4 @@
-import User from '../../Database/models/User';
 import express, { Router } from 'express';
-import Logger, { ERROR } from '../../utils/Logger';
 import Friend from '../../Database/models/Friend';
 
 const app = Router();

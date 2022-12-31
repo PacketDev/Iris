@@ -2,7 +2,7 @@ import express, { Router } from 'express';
 import User from '../../Database/models/User';
 import Logger from '../../utils/Logger';
 import bcrypt from 'bcryptjs';
-import config from '../../config/config.json';
+import { Error, ERR_BADAUTH } from '../Errors/Errors';
 
 const app = Router();
 
@@ -16,19 +16,13 @@ app.post('/api/v0/auth/login', async (req, res) => {
 
   try {
     if (!user) {
-      return res.status(403).json({
-        message: config.generic,
-        status: false,
-      });
+      return res.status(403).json(Error(ERR_BADAUTH));
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      return res.status(403).json({
-        message: config.generic,
-        status: false,
-      });
+      return res.status(403).json(Error(ERR_BADAUTH));
     }
 
     // @ts-ignore

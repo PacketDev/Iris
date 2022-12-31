@@ -9,12 +9,6 @@ const app = Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-/************** ERROR VALUES */
-const ERR_NOTFOUND =
-  "The specified user could not be found using the provided ID.";
-
-/*************************** */
-
 app.get("/api/v0/conversations/", async (req, res) => {
   let Authorization = req.headers.authorization;
 

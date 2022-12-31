@@ -53,17 +53,11 @@ app.post("/api/v0/user/avatar/:userID", async (req, res) => {
     }
     const user = await User.findOne({ UID }).catch((error) => {
       Logger.ERROR(error);
-      return res.json({
-        message: ERR_NOTFOUND,
-        status: false,
-      });
+      return res.status(404).json(Error(ERR_NOTFOUND));
     });
     // Check existence
     if (!user) {
-      return res.json({
-        message: ERR_NOTFOUND,
-        status: false,
-      });
+      return res.status(404).json(Error(ERR_NOTFOUND));
     }
 
     // Check Authorization header
@@ -124,17 +118,11 @@ app.delete("/api/v0/user/avatar/:userID", async (req, res) => {
     }
     const user = await User.findOne({ UID }).catch((error) => {
       Logger.ERROR(error);
-      return res.json({
-        message: ERR_NOTFOUND,
-        status: false,
-      });
+      return res.status(404).json(Error(ERR_NOTFOUND));
     });
     // Check existence
     if (!user) {
-      return res.json({
-        message: ERR_NOTFOUND,
-        status: false,
-      });
+      return res.status(404).json(Error(ERR_NOTFOUND));
     }
 
     // Check Authorization header
