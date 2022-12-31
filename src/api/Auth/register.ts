@@ -2,7 +2,7 @@ import express, { Router } from "express";
 import User from "../../Database/models/User";
 import Logger, { ERROR } from "../../utils/Logger";
 import bcrypt from "bcryptjs";
-import {
+import { Error,
   ERR_EMAIL,
   ERR_UNAME,
   ERR_PASWD,

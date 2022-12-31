@@ -9,7 +9,7 @@ const app = Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/api/v0/conversations/", async (req, res) => {
+app.get("/api/v0/conversations/:userID", async (req, res) => {
   let Authorization = req.headers.authorization;
 
   // @ts-ignore
@@ -23,7 +23,8 @@ app.get("/api/v0/conversations/", async (req, res) => {
   } else {
     return res.sendStatus(422);
   }
-  const user = await User.findOne({ password: Authorization });
+  const user = await User.findOne({ UID: req.params.userID, password: Authorization });
+
   try {
     // @ts-ignore
     return res.json(user.conversations);
