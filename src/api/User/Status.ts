@@ -48,7 +48,7 @@ app.post("/api/v0/user/status/:userID", async (req, res) => {
     return res.sendStatus(422);
   }
   try {
-    if (!req.params.userID || req.params.userID === null) {
+    if (!req.params.userID || req.params.userID === null || !Status) {
       return res.sendStatus(422);
     }
     const user = await User.findOne({ UID }).catch((error) => {

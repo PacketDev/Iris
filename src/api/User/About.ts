@@ -3,7 +3,6 @@
 import express, { Router } from "express";
 import User from "../../Database/models/User";
 import Logger from "../../utils/Logger";
-import config from "../../config/config.json";
 
 const app = Router();
 
@@ -78,8 +77,7 @@ app.post("/api/v0/user/about/:userID", async (req, res) => {
     }
     // Set about
     // @ts-ignore
-    if 
-      (About && About != "") {
+    if (About && About != "") {
       // @ts-ignore
       user.aboutme = About;
     }

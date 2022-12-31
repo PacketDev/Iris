@@ -1,4 +1,4 @@
-// Public API
+// Private API
 
 import express, { Router } from "express";
 import User from "../../Database/models/User";

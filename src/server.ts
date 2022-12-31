@@ -11,6 +11,8 @@ import create from "./api/Friend/create";
 import pending from "./api/Friend/pending";
 import about from "./api/User/About";
 import conversations from "./api/Conversations/Base";
+import conversations__ID from "./api/Conversations/UID";
+import conversations__Time from "./api/Conversations/UNIX";
 import avatar from "./api/User/Avatar";
 import status from "./api/User/Status";
 import UID from "./api/User/UID";
@@ -26,6 +28,8 @@ app.use(pending);
 app.use(about);
 app.use(avatar);
 app.use(conversations);
+app.use(conversations__ID);
+app.use(conversations__Time);
 app.use(status);
 app.use(UID);
 

@@ -20,7 +20,7 @@ app.post("/api/v0/user/:userID", async (req, res) => {
   const user = await User.findOne({ UID });
 
   try {
-    if (!user) {
+    if (!user || !UID) {
       return res.json({
         message: ERR_NOTFOUND,
         status: false,
