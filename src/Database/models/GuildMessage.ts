@@ -1,15 +1,20 @@
-import mongoose, { Schema, SchemaTypes } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
-const GMSchema = new Schema({
+const messageSchema = new Schema({
   senderId: {
     type: String,
   },
   message: {
     type: String,
   },
-  guildId: {
-    type: String,
+  deletedBySender: {
+    type: Boolean,
+    default: false,
+  },
+  deletedByReceiver: {
+    type: Boolean,
+    default: false,
   },
 });
 
-export default mongoose.model('GuildMessage', GMSchema);
+export default mongoose.model('Message', messageSchema);
