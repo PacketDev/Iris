@@ -29,7 +29,7 @@ app.post(`${API_BASE}auth/login`, async (req, res) => {
       return res.status(403).json(Error(ERR_BADAUTH));
     }
 
-    user.token = `IRK.${rand.generate(32)}`; // generate and return random token if password is correct
+    user.token = `IRK.${rand.generate(45)}`; // generate and return random token if password is correct
     user.save();
 
     return res.json({
