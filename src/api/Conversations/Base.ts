@@ -24,10 +24,18 @@ app.get("/api/v0/conversations/:userID", async (req, res) => {
   } else {
     return res.sendStatus(422);
   }
-  const user = await User.findOne({
-    UID: req.params.userID,
-    password: Authorization,
-  });
+
+  let userRequest;
+
+  try {
+    userRequest = await User.findOne({
+      UID: req.params.userID,
+      password: Authorization,
+    });
+  } catch (error) {
+    return res.sendStatus(400);
+  }
+  const user = userRequest;
 
   try {
     let response: any = [];

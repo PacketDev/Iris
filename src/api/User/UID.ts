@@ -12,8 +12,15 @@ app.use(express.urlencoded({ extended: false }));
 
 app.post("/api/v0/user/:userID", async (req, res) => {
   const UID: Number = parseInt(req.params.userID);
-  const user = await User.findOne({ UID });
+  let userRequest;
 
+  try {
+    userRequest = await User.findOne({ UID });
+  } catch (error) {
+    return res.sendStatus(400);
+  }
+  const user = userRequest;
+  
   try {
     if (!user || !UID) {
       return res.status(404).json(Error(ERR_NOTFOUND));
