@@ -29,7 +29,7 @@ app.get(`${API_BASE}conversations/:userID`, async (req, res) => {
 
   try {
     userRequest = await User.findOne({
-      UID: req.params.userID,
+      UID: req.params["userID"],
       token: Authorization,
     });
   } catch (error) {
