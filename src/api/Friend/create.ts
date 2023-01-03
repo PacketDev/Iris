@@ -1,13 +1,14 @@
 import User from "../../Database/models/User";
 import express, { Router } from "express";
 import { USER_NOTFOUND } from "../Errors/Errors";
+import { API_BASE } from "../../config/config.json";
 
 const app = Router();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post("/api/v0/friend/addFriend", async (req, res) => {
+app.post(`${API_BASE}friend/addFriend`, async (req, res) => {
   const { username, tagId } = req.body; // test
 
   const user = await User.findOne({ username, tagId });

@@ -1,4 +1,5 @@
 {
+  "API_BASE": "/api/v0/",
   "port": 8080,
   "mongoURI.old": "mongodb+srv://Packet:packetcool22@cluster0.uu2fq13.mongodb.net/Iris?retryWrites=true&w=majority",
   "mongoURI": "mongodb://localhost:27017/iris1",

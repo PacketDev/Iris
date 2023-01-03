@@ -4,6 +4,7 @@ import express, { Router } from "express";
 import User from "../../Database/models/User";
 import Logger from "../../utils/Logger";
 import { ERR_NOTFOUND } from "../Errors/Errors";
+import { API_BASE } from "../../config/config.json";
 
 const app = Router();
 
@@ -24,7 +25,7 @@ app.use(express.urlencoded({ extended: false }));
    @authentication Must be present
 */
 
-app.post("/api/v0/user/about/:userID", async (req, res) => {
+app.post(`${API_BASE}user/about/:userID`, async (req, res) => {
   // Find user
   let Authorization = req.headers.authorization;
   const UID: string = req.params.userID;
@@ -88,7 +89,7 @@ app.post("/api/v0/user/about/:userID", async (req, res) => {
   }
 });
 
-app.delete("/api/v0/user/about/:userID", async (req, res) => {
+app.delete(`${API_BASE}user/about/:userID`, async (req, res) => {
   // Find user
   let Authorization = req.headers.authorization;
   const UID: string = req.params.userID;

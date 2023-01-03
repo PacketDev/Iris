@@ -2,13 +2,15 @@ import express, { Router } from "express";
 import User from "../../Database/models/User";
 import Logger, { ERROR } from "../../utils/Logger";
 import bcrypt from "bcryptjs";
-import { Error,
+import {
+  Error,
   ERR_EMAIL,
   ERR_UNAME,
   ERR_PASWD,
   ERR_ENFORCEMENT_FAILED,
   ERR_TAKEN,
 } from "../Errors/Errors";
+import { API_BASE } from "../../config/config.json";
 
 const app = Router();
 
@@ -25,7 +27,7 @@ const complexity__regex =
 
 /*********************************** */
 
-app.post("/api/v0/auth/register", async (req, res) => {
+app.post(`${API_BASE}auth/register`, async (req, res) => {
   const { email, username, password: text } = req.body;
 
   if (!email || typeof email !== "string" || !email__regex.test(email)) {

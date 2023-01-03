@@ -4,13 +4,14 @@ import express, { Router } from "express";
 import User from "../../Database/models/User";
 import Logger from "../../utils/Logger";
 import { Error, ERR_NOTFOUND } from "../Errors/Errors";
+import { API_BASE } from "../../config/config.json";
 
 const app = Router();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post("/api/v0/user/:userID", async (req, res) => {
+app.post(`${API_BASE}user/:userID`, async (req, res) => {
   const UID: Number = parseInt(req.params.userID);
   let userRequest;
 
@@ -20,7 +21,7 @@ app.post("/api/v0/user/:userID", async (req, res) => {
     return res.sendStatus(400);
   }
   const user = userRequest;
-  
+
   try {
     if (!user || !UID) {
       return res.status(404).json(Error(ERR_NOTFOUND));

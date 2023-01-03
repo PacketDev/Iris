@@ -4,6 +4,7 @@ import express, { Router } from "express";
 import User from "../../Database/models/User";
 import Logger from "../../utils/Logger";
 import config from "../../config/config.json";
+import { API_BASE } from "../../config/config.json";
 
 const app = Router();
 
@@ -30,7 +31,7 @@ const ERR_NOTFOUND =
    @authentication Must be present
 */
 
-app.post("/api/v0/user/avatar/:userID", async (req, res) => {
+app.post(`${API_BASE}user/avatar/:userID`, async (req, res) => {
   // Find user
   let Authorization = req.headers.authorization;
   const UID: string = req.params.userID;
@@ -88,14 +89,13 @@ app.post("/api/v0/user/avatar/:userID", async (req, res) => {
       about: user.aboutme, // @ts-ignore
       status: user.status,
     });
-
   } catch (err) {
     res.sendStatus(400); // Bad request
     Logger.ERROR(err);
   }
 });
 
-app.delete("/api/v0/user/avatar/:userID", async (req, res) => {
+app.delete(`${API_BASE}user/avatar/:userID`, async (req, res) => {
   // Find user
   let Authorization = req.headers.authorization;
   const UID: string = req.params.userID;
@@ -151,7 +151,6 @@ app.delete("/api/v0/user/avatar/:userID", async (req, res) => {
       about: user.aboutme, // @ts-ignore
       status: user.status,
     });
-
   } catch (err) {
     res.sendStatus(400); // Bad request
     Logger.ERROR(err);

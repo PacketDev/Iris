@@ -1,9 +1,10 @@
 import { WebSocketServer } from "ws";
 import User from "../Database/models/User";
 import Logger from "../utils/Logger";
+import { API_BASE } from "../config/config.json";
 const wss = new WebSocketServer({
   noServer: true,
-  path: "/api/v0/conversations",
+  path: `${API_BASE}conversations`,
 });
 
 // For every connection attempt
@@ -82,8 +83,7 @@ function broadcastToPeer(data, WebsocketConnection) {
       client !== WebsocketConnection &&
       client.readyState === WebsocketConnection.OPEN
     ) {
-    
-    // TODO - Check client room status + only send if in same room
+      // TODO - Check client room status + only send if in same room
       client.send(JSON.stringify(data));
     }
   });

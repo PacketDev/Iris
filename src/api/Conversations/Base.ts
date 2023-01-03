@@ -1,7 +1,7 @@
 // Private API
 
 import express, { Router } from "express";
-import { AnyArray } from "mongoose";
+import { API_BASE } from "../../config/config.json";
 import User from "../../Database/models/User";
 import Logger from "../../utils/Logger";
 
@@ -10,7 +10,7 @@ const app = Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/api/v0/conversations/:userID", async (req, res) => {
+app.get(`${API_BASE}conversations/:userID`, async (req, res) => {
   let Authorization = req.headers.authorization;
 
   // @ts-ignore

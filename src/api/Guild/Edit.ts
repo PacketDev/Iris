@@ -1,15 +1,17 @@
 // Guilds - EditMessage
 
-import express, { Router } from 'express';
-import Message from '../../Database/models/GuildMessage';
-import { ERROR } from '../../utils/Logger';
-import { ERR_BADPARAMS } from '../Errors/Errors';
+import express, { Router } from "express";
+import Message from "../../Database/models/GuildMessage";
+import { ERROR } from "../../utils/Logger";
+import { ERR_BADPARAMS } from "../Errors/Errors";
+import { API_BASE } from "../../config/config.json";
+
 const app = Router();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.put('/api/v0/guild/edit/:messageId', async (req, res) => {
+app.put(`${API_BASE}guild/edit/:messageId`, async (req, res) => {
   try {
     const { messageId } = req.params;
     const { message, username } = req.body;

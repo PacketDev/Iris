@@ -5,13 +5,14 @@ import Room from "../../Database/models/Room";
 import User from "../../Database/models/User";
 import Logger from "../../utils/Logger";
 import { Error, ERR_NOTFOUND, ERR_RNOTFOUND } from "../Errors/Errors";
+import { API_BASE } from "../../config/config.json";
 
 const app = Router();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post("/api/v0/conversations/:userID/:roomID", async (req, res) => {
+app.post(`${API_BASE}conversations/:userID/:roomID`, async (req, res) => {
   let Authorization = req.headers.authorization;
 
   // @ts-ignore
