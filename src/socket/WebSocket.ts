@@ -86,20 +86,21 @@ wss.on("connection", (WebsocketConnection, req) => {
     let room = await Room.findOne({
       id: RID,
       participants: username,
-      type: guildType ? "CONVERSATION" : "GUILD",
+      type: guildType ? "GUILD": "CONVERSATION",
     });
 
     // If room doesnt exist and it's a Direct Message
 
     // We create an ID of it being the lowest ID first and then the highest ID
     // Example: Reciever ID: 2 and Sender ID: 1 -> 12
-
+    console.log(room, guildType ? "GUILD": "CONVERSATION");
+    console.log(!room && !guildType);
     if (!room && !guildType) {
       room = await Room.create({
         id: RID,
         type: "CONVERSATION", // @ts-ignore
         participants: [username, req.params.RID],
-        messages: []
+        messages: [],
       });
       Logger.INFO(
         // @ts-ignore
