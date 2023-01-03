@@ -1,23 +1,15 @@
 import { WebSocketServer } from "ws";
 import User from "../Database/models/User";
 import Logger from "../utils/Logger";
-// @ts-ignore
-let clients = [];
 const wss = new WebSocketServer({
   noServer: true,
+  path: "/api/v0/conversations"
 });
 
 // For every connection attempt
-wss.on("request", function (request) {
-  let connection = request.accept(null, request.origin);
-  clients.push(connection) - 1;
-  // @ts-ignore
-  console.log(clients);
-});
 wss.on("connection", (WebsocketConnection) => {
   Logger.INFO("Client Connected.");
   let LoggedIn = false;
-
   // For every message
   WebsocketConnection.on("message", async (msg) => {
     // @ts-ignore
@@ -26,7 +18,7 @@ wss.on("connection", (WebsocketConnection) => {
       // @ts-ignore
       data = JSON.parse(msg);
     } catch (error) {
-      WebsocketConnection.send(JSON.stringify(serverMsg(-1)));
+      WebsocketConnection.send(JSON.stringify(serverMsg(-1, null)));
       Logger.WARN("[WEBSOCKET] Spec Violation: Unsupported Format!");
     }
     // Extract Data
@@ -46,13 +38,13 @@ wss.on("connection", (WebsocketConnection) => {
         !user
       ) {
         Logger.WARN("Client login failed");
-        return WebsocketConnection.send(JSON.stringify(serverMsg(-1)));
+        return WebsocketConnection.send(JSON.stringify(serverMsg(-1, null)));
       } else if (!LoggedIn) {
-        WebsocketConnection.send(JSON.stringify(serverMsg(1)));
+        WebsocketConnection.send(JSON.stringify(serverMsg(1, "SUCCESS")));
         Logger.INFO("Client logged in");
         return (LoggedIn = true);
       } else {
-        WebsocketConnection.send(JSON.stringify(serverMsg(-1)));
+        WebsocketConnection.send(JSON.stringify(serverMsg(-1, "FAILURE")));
       }
     }
 
@@ -65,24 +57,34 @@ wss.on("connection", (WebsocketConnection) => {
       case 3:
         break;
       default:
-        WebsocketConnection.send(JSON.stringify(serverMsg(-1)));
+        WebsocketConnection.send(JSON.stringify(serverMsg(-1, "BAD_MESSAGE")));
     }
     // console.log(data);
     Logger.INFO("Logged IN: " + LoggedIn);
   });
 });
 
-function serverMsg(status: Number) {
+function serverMsg(status: Number, content: any) {
   return {
     // @ts-ignore
     type: 0,
     status: status,
+    content: content,
   };
 }
 
 // @ts-ignore
-function broadcastToPeer(data: object, WebsocketConnection) {
-  WebsocketConnection.send(JSON.stringify(data));
+function broadcastToPeer(data, WebsocketConnection) {
+  // WebsocketConnection.send(JSON.stringify(data));
+
+  wss.clients.forEach(function each(client) {
+    if (
+      client !== WebsocketConnection &&
+      client.readyState === WebsocketConnection.OPEN
+    ) {
+      client.send(data);
+    }
+  });
 }
 
 export { wss };

@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: false }));
 app.post('/api/v0/auth/login', async (req, res) => {
   const { username, password } = req.body;
 
-  const user = await User.findOne({ username }) || await User.findOne({email: username});
+  const user = await User.findOne({ username }) || await User.findOne({email: username.toLowerCase()});
 
   try {
     if (!user) {
