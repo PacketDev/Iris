@@ -34,12 +34,12 @@ wss.on("connection", (WebsocketConnection) => {
       if (
         auth === undefined ||
         !auth ||
-        auth != user?.password ||
+        auth != user?.token ||
         type != 0 ||
         !user
       ) {
         Logger.WARN("Client login failed");
-        return WebsocketConnection.send(JSON.stringify(serverMsg(-1, null)));
+        return WebsocketConnection.send(JSON.stringify(serverMsg(-1, "BAD_AUTH")));
       } else if (!LoggedIn) {
         WebsocketConnection.send(JSON.stringify(serverMsg(1, "SUCCESS")));
         Logger.INFO("Client logged in");
