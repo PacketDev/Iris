@@ -45,7 +45,7 @@ app.post(`${API_BASE}conversations/:userID/:roomID`, async (req, res) => {
   // Check Authorization header
   if (Authorization) {
     // @ts-ignore
-    const isValidPassword = Authorization === user.password;
+    const isValidPassword = Authorization === user.token;
     if (!isValidPassword) {
       return res.sendStatus(403);
     }

@@ -30,7 +30,7 @@ app.get(`${API_BASE}conversations/:userID`, async (req, res) => {
   try {
     userRequest = await User.findOne({
       UID: req.params.userID,
-      password: Authorization,
+      token: Authorization,
     });
   } catch (error) {
     return res.sendStatus(400);

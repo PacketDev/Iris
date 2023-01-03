@@ -4,6 +4,7 @@ import Logger from "../../utils/Logger";
 import bcrypt from "bcryptjs";
 import { Error, ERR_BADAUTH } from "../Errors/Errors";
 import { API_BASE } from "../../config/config.json";
+const rand = require("random-key");
 
 const app = Router();
 
@@ -28,13 +29,14 @@ app.post(`${API_BASE}auth/login`, async (req, res) => {
       return res.status(403).json(Error(ERR_BADAUTH));
     }
 
-    // @ts-ignore
-    delete user.password;
+    user.token = `IRK.${rand.generate(32)}`; // generate and return random token if password is correct
+    user.save();
+
     return res.json({
       status: true,
       loggedIn: true,
       id: user.UID,
-      token: user.password,
+      token: user.token,
     });
   } catch (err) {
     res.sendStatus(400); // Bad request

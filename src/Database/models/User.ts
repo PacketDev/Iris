@@ -42,6 +42,10 @@ const userSchema = new Schema({
     type: String,
     required: false,
   },
+  token: {
+    type: String,
+    required: true,
+  },
   conversations: {
     type: Array,
     required: false,

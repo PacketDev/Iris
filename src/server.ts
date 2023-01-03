@@ -24,6 +24,7 @@ import UABT from "./api/User/About";
 import UAVT from "./api/User/Avatar";
 import USTS from "./api/User/Status";
 import URID from "./api/User/UID";
+import VERSION from "./api/Version/Base";
 
 app.use([
   Login,
@@ -41,6 +42,7 @@ app.use([
   UAVT,
   USTS,
   URID,
+  VERSION,
 ]);
 
 app.use(Login);
