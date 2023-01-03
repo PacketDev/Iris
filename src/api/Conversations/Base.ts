@@ -67,7 +67,7 @@ app.get(`${API_BASE}conversations/:userID`, async (req, res) => {
     }, 5000);
   } catch (err) {
     res.sendStatus(400); // Bad request
-    Logger.ERROR(err);
+    Logger.ERROR("HANDLED ERROR: BAD_AUTH: " + err);
   }
 });
 
