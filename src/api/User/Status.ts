@@ -4,17 +4,12 @@ import express, { Router } from "express";
 import User from "../../Database/models/User";
 import Logger from "../../utils/Logger";
 import { API_BASE } from "../../config/config.json";
+import { ERR_NOTFOUND, Error } from "../Errors/Errors";
 
 const app = Router();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-/************** ERROR VALUES */
-const ERR_NOTFOUND =
-  "The specified user could not be found using the provided ID.";
-
-/*************************** */
 
 /* REQUEST BODY
 {
