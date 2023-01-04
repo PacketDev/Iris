@@ -122,7 +122,7 @@ wss.on("connection", (WebsocketConnection, req) => {
       reciever?.conversations?.push(username);
       console.log(room, guildType);
       user?.save();
-      reciever?.save()
+      reciever?.save();
       room.save();
     } else {
       Logger.INFO(
