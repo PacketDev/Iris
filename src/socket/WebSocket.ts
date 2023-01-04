@@ -6,6 +6,7 @@ import { API_BASE } from "../config/config.json";
 // @ts-ignore
 import parseQueryParameters from "parse-url-query-params";
 let userMessageCache: any = {};
+let clients: any = [];
 const wss = new WebSocketServer({
   noServer: true,
   path: `${API_BASE}conversations`,
@@ -41,7 +42,8 @@ wss.on("connection", (WebsocketConnection, req) => {
     // @ts-ignore
     `Client Connected to room ${req.params.RID} - GUILD = ${req.params.guild}`
   );
-  let LoggedIn = false;
+  let LoggedIn: Boolean = false;
+  let saveInProgress: Boolean = false;
   // For every message
 
   WebsocketConnection.on("message", async (msg) => {
@@ -139,6 +141,7 @@ wss.on("connection", (WebsocketConnection, req) => {
         WebsocketConnection.send(JSON.stringify(serverMsg(1, "SUCCESS")));
         Logger.INFO("Client logged in");
         WebsocketConnection.send(JSON.stringify(room?.messages));
+        clients.push({ id: username, room: RID }); // Add to client list
         return (LoggedIn = true);
       } else {
         WebsocketConnection.send(JSON.stringify(serverMsg(-1, "FAILURE")));
@@ -159,13 +162,10 @@ wss.on("connection", (WebsocketConnection, req) => {
     // console.log(data);
     Logger.INFO("Logged IN: " + LoggedIn);
 
-    setTimeout(() => {
-      // @ts-ignore
-      room.messages = userMessageCache[RID] || []; // Empty array in case of bad message
-      // @ts-ignore
-      console.log("STORED MESSAGES", userMessageCache[RID] || []);
-      room?.save();
-    }, 5000);
+    if (!saveInProgress) {
+      saveThread(room, RID); // Room to save
+      saveInProgress = true;
+    }
   });
 
   // Send a heartbeat to the client every 20s
@@ -194,17 +194,18 @@ function serverMsg(status: Number, content: any) {
  */
 // @ts-ignore
 function broadcastToPeer(data, WebsocketConnection, RID) {
-  wss.clients.forEach((client) => {
+  wss.clients.forEach((client, index) => {
     if (
       client !== WebsocketConnection &&
-      client.readyState === WebsocketConnection.OPEN
+      client.readyState === WebsocketConnection.OPEN // &&
+      // @ts-ignore
+      // clients[index].room === RID
     ) {
-      client.send(JSON.parse(data));
-    } else if (userMessageCache[RID] === null) {
-      userMessageCache[RID] = [];
-    } else {
       userMessageCache[RID].push(data); // push the parsed data
+      client.send(JSON.stringify(data));
       return Logger.INFO(`Stored Message ${data}`);
+    } else if (userMessageCache[RID] === null) {
+      return (userMessageCache[RID] = []);
     }
   });
 }
@@ -217,6 +218,16 @@ function createRID(sender, reciever) {
   } else {
     return `${reciever}${sender}`;
   }
+}
+
+function saveThread(room: any, RID: string) {
+  setInterval(() => {
+    // @ts-ignore
+    room.messages = userMessageCache[RID] || []; // Empty array in case of bad message
+    // @ts-ignore
+    console.log("STORED MESSAGES", userMessageCache[RID] || []);
+    room?.save();
+  }, 5000);
 }
 
 export { wss };
