@@ -110,7 +110,16 @@ wss.on("connection", (WebsocketConnection, req) => {
         `NEW Room created with RID=${RID}; TYPE=CONVERSATION; PARTICIPANTS=[${username}, ${req.params.RID}]`
       );
       // @ts-ignore
+      const reciever = await User.findOne({ UID: req.params.RID });
+      if (!reciever) {
+        // Add to recieving end too
+        return WebsocketConnection.send(
+          JSON.stringify(serverMsg(-1, "BAD_RECIEVING_END"))
+        );
+      }
+      // @ts-ignore
       user?.conversations?.push(req.params.RID);
+      reciever?.conversations?.push(username);
       console.log(room, guildType);
       user?.save();
       room.save();
