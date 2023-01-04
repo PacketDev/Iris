@@ -43,6 +43,7 @@ wss.on("connection", (WebsocketConnection, req) => {
   );
   let LoggedIn = false;
   // For every message
+
   WebsocketConnection.on("message", async (msg) => {
     let data: any = {};
     try {
@@ -86,14 +87,14 @@ wss.on("connection", (WebsocketConnection, req) => {
     let room = await Room.findOne({
       id: RID,
       participants: username,
-      type: guildType ? "GUILD": "CONVERSATION",
+      type: guildType ? "GUILD" : "CONVERSATION",
     });
 
     // If room doesnt exist and it's a Direct Message
 
     // We create an ID of it being the lowest ID first and then the highest ID
     // Example: Reciever ID: 2 and Sender ID: 1 -> 12
-    console.log(room, guildType ? "GUILD": "CONVERSATION");
+    console.log(room, guildType ? "GUILD" : "CONVERSATION");
     console.log(!room && !guildType);
     if (!room && !guildType) {
       room = await Room.create({
@@ -116,7 +117,7 @@ wss.on("connection", (WebsocketConnection, req) => {
         // @ts-ignore
         `USING Room created with RID=${RID}; TYPE=CONVERSATION; PARTICIPANTS=[${username}, ${req.params.RID}]`
       );
-      WebsocketConnection.send(JSON.stringify(room?.messages)); // @ts-ignore
+      // @ts-ignore
       userMessageCache[RID] = room?.messages;
       console.log(room?.messages);
     }
@@ -137,6 +138,7 @@ wss.on("connection", (WebsocketConnection, req) => {
       } else if (!LoggedIn) {
         WebsocketConnection.send(JSON.stringify(serverMsg(1, "SUCCESS")));
         Logger.INFO("Client logged in");
+        WebsocketConnection.send(JSON.stringify(room?.messages));
         return (LoggedIn = true);
       } else {
         WebsocketConnection.send(JSON.stringify(serverMsg(-1, "FAILURE")));
@@ -184,26 +186,27 @@ function serverMsg(status: Number, content: any) {
   };
 }
 
+/**
+ *
+ * @param data Current Message
+ * @param WebsocketConnection Websocket connection
+ * @param RID RoomID
+ */
 // @ts-ignore
 function broadcastToPeer(data, WebsocketConnection, RID) {
-  // WebsocketConnection.send(JSON.stringify(data));
-
-  wss.clients.forEach(function each(client) {
+  wss.clients.forEach((client) => {
     if (
       client !== WebsocketConnection &&
       client.readyState === WebsocketConnection.OPEN
     ) {
-      // TODO - Check client room status + only send if in same room
-      client.send(JSON.stringify(data));
+      client.send(JSON.parse(data));
+    } else if (userMessageCache[RID] === null) {
+      userMessageCache[RID] = [];
+    } else {
+      userMessageCache[RID].push(data); // push the parsed data
+      return Logger.INFO(`Stored Message ${data}`);
     }
   });
-  // Store messages
-
-  if (userMessageCache[RID] === undefined) {
-    userMessageCache[RID] = [];
-  }
-  userMessageCache[RID].push(data);
-  Logger.INFO(`STORED MESSAGE ${data}`);
 }
 
 // Create room ID
