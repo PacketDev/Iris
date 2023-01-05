@@ -169,7 +169,12 @@ wss.on("connection", (WebsocketConnection, req) => {
         WebsocketConnection.send(JSON.stringify(serverMsg(1, "SUCCESS")));
         Logger.INFO("Client logged in");
         WebsocketConnection.send(JSON.stringify(room?.messages));
-        clients.push({ id: username, room: RID }); // Add to client list
+        if (!clients[RID]) {
+          clients[RID] = [];
+        }
+        if (!clients[RID][username]) {
+          clients[RID].push(username); // Add to client list
+        }
         userIndex = clients.length;
         console.log(clients);
         // Start the saveThread
