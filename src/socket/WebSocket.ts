@@ -18,7 +18,7 @@ wss.on("connection", (WebsocketConnection, req) => {
   // Polyfills
   // The request params
   req.params = parseQueryParameters(req.url);
-
+  const ip = req.socket.remoteAddress;
   // Spec Violation
   function specViolation(error: any) {
     WebsocketConnection.send(JSON.stringify(serverMsg(-1, null)));
@@ -42,9 +42,27 @@ wss.on("connection", (WebsocketConnection, req) => {
     // @ts-ignore
     `Client Connected to room ${req.params.RID} - GUILD = ${req.params.guild}`
   );
+  let room: any = null;
   let LoggedIn: Boolean = false;
-  let saveInProgress: Boolean = false;
+  let saveThread: any = null;
+  // @ts-ignore
+  let userIndex: Number = null;
   // For every message
+
+  WebsocketConnection.on("close", async () => {
+    Logger.WARN(ip + " disconnected.");
+    // Try and remove the threads
+    try {
+      Logger.INFO("KILL THREAD SAVE");
+      clearInterval(saveThread);
+      Logger.INFO("KILL THREAD HEARTBEAT");
+      clearInterval(heartbeat);
+      Logger.INFO(`REMOVE USER ${userIndex}`);
+      clients = clients.splice(userIndex, 1);
+    } catch (error) {
+      Logger.WARN(`No threads were ever assigned to ${ip}`);
+    }
+  });
 
   WebsocketConnection.on("message", async (msg) => {
     let data: any = {};
@@ -86,7 +104,7 @@ wss.on("connection", (WebsocketConnection, req) => {
     user_ = undefined; // Cleanup
     // Looking for room...
     RID = createRID(username, RID);
-    let room = await Room.findOne({
+    room = await Room.findOne({
       id: RID,
       participants: username,
       type: guildType ? "GUILD" : "CONVERSATION",
@@ -152,6 +170,18 @@ wss.on("connection", (WebsocketConnection, req) => {
         Logger.INFO("Client logged in");
         WebsocketConnection.send(JSON.stringify(room?.messages));
         clients.push({ id: username, room: RID }); // Add to client list
+        userIndex = clients.length;
+        console.log(clients);
+        // Start the saveThread
+        // Save the room every 5 seconds
+        saveThread = setInterval(() => {
+          // @ts-ignore
+          room.messages = userMessageCache[RID] || []; // Empty array in case of bad message
+          // @ts-ignore
+          console.log("STORED MESSAGES", userMessageCache[RID] || []);
+          room?.save();
+        }, 5000);
+
         return (LoggedIn = true);
       } else {
         WebsocketConnection.send(JSON.stringify(serverMsg(-1, "FAILURE")));
@@ -171,17 +201,12 @@ wss.on("connection", (WebsocketConnection, req) => {
     }
     // console.log(data);
     Logger.INFO("Logged IN: " + LoggedIn);
-
-    if (!saveInProgress) {
-      saveThread(room, RID); // Room to save
-      saveInProgress = true;
-    }
   });
 
   // Send a heartbeat to the client every 20s
   // We do this to prevent the socket from commiting suicide.
 
-  setInterval(() => {
+  const heartbeat = setInterval(() => {
     // @ts-ignore
     WebsocketConnection.broadcast(serverMsg(0, "HEARTBEAT"));
   }, 20000);
@@ -207,9 +232,9 @@ function broadcastToPeer(data, WebsocketConnection, RID) {
   wss.clients.forEach((client, index) => {
     if (
       client !== WebsocketConnection &&
-      client.readyState === WebsocketConnection.OPEN // &&
+      client.readyState === WebsocketConnection.OPEN &&
       // @ts-ignore
-      // clients[index].room === RID
+      clients[index].room === RID
     ) {
       userMessageCache[RID].push(data); // push the parsed data
       client.send(JSON.stringify(data));
@@ -228,16 +253,6 @@ function createRID(sender, reciever) {
   } else {
     return `${reciever}${sender}`;
   }
-}
-
-function saveThread(room: any, RID: string) {
-  setInterval(() => {
-    // @ts-ignore
-    room.messages = userMessageCache[RID] || []; // Empty array in case of bad message
-    // @ts-ignore
-    console.log("STORED MESSAGES", userMessageCache[RID] || []);
-    room?.save();
-  }, 5000);
 }
 
 export { wss };
