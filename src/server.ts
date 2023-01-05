@@ -22,6 +22,7 @@ import GEDT from "./api/Guild/Edit";
 import GMSG from "./api/Guild/Message";
 import UABT from "./api/User/About";
 import UAVT from "./api/User/Avatar";
+import PREF from "./api/User/Preferences"
 import USTS from "./api/User/Status";
 import URID from "./api/User/UID";
 import VERSION from "./api/Version/Base";
@@ -40,6 +41,7 @@ app.use([
   GMSG,
   UABT,
   UAVT,
+  PREF,
   USTS,
   URID,
   VERSION,

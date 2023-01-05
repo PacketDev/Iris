@@ -21,6 +21,12 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  preference: {
+    type: String,
+    required: false,
+    unique: false,
+    default: "{}", // TODO - Create default template
+  },
   avatar: {
     type: String,
     required: true,
