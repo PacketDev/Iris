@@ -7,7 +7,7 @@ const app = Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post(`${API_BASE}friend/pending`, async (req, res) => {
+app.get(`${API_BASE}friend/pending`, async (req, res) => {
   const friendRequest = await Friend.find({ toUser: req.body.id, status: true })
     .populate({ path: "toUser" })
     .populate({ path: "fromUser" });

@@ -1,6 +1,6 @@
 import User from "../../Database/models/User";
 import express, { Router } from "express";
-import { USER_NOTFOUND } from "../Errors/Errors";
+import { USER_NOTFOUND, Error } from "../Errors/Errors";
 import { API_BASE } from "../../config/config.json";
 
 const app = Router();
@@ -26,8 +26,8 @@ app.post(`${API_BASE}friend/add`, async (req, res) => {
   //   res.json({ status: true, friendRequestData });
   // }
 
-  if (!friendRequestData || !user?.username || !tagId) {
-    res.json(Error(USER_NOTFOUND));
+  if (!friendRequestData || !user?.username || !ID) {
+    res.status(400).json(Error(USER_NOTFOUND));
   } else {
     res.json({ status: true, friendRequestData });
   }
