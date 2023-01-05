@@ -4,7 +4,7 @@ import Logger from "../../utils/Logger";
 import bcrypt from "bcryptjs";
 import { Error, ERR_BADAUTH } from "../Errors/Errors";
 import { API_BASE } from "../../config/config.json";
-const rand = require("random-key");
+import cryptoRandomString from "crypto-random-string";
 
 const app = Router();
 
@@ -29,7 +29,10 @@ app.post(`${API_BASE}auth/login`, async (req, res) => {
       return res.status(403).json(Error(ERR_BADAUTH));
     }
 
-    user.token = `IRK.${rand.generate(45)}`; // generate and return random token if password is correct
+    user.token = `IRK.${cryptoRandomString({
+      length: 45,
+      type: "alphanumeric",
+    })}`; // generate and return random token if password is correct
     user.save();
 
     return res.json({
