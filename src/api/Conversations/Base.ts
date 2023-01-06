@@ -41,6 +41,7 @@ app.get(`${API_BASE}conversations/:userID`, async (req, res) => {
     let response: any = [];
     // @ts-ignore
     user.conversations?.forEach(async (UID, index, array) => {
+      // For each user that is a part of the conversations array, we then create a response
       const user = await User.findOne({ UID });
       // console.log(user);
       response.push({
