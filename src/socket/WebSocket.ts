@@ -191,7 +191,7 @@ function ws_main(io: any) {
           socket.emit("message", JSON.stringify(roomData?.messages));
           // Join the room
           socket.join(roomID);
-
+          Logger.INFO("[ROOMS]: JOIN SUCCESS");
           // Create a cache store if nonexistent
           if (!userMessageCache[roomID]) {
             userMessageCache[roomID] = [];
@@ -219,11 +219,23 @@ function ws_main(io: any) {
     // End function roomLogon
 
     function roomMode(data: any) {
-      console.log(data);
+      // We need to reload all of this again
+      try {
+        // @ts-ignore
+        data = JSON.parse(data);
+      } catch (error) {
+        Logger.WARN(data);
+        return specViolation(error);
+      }
+      type = data.type;
+      // END reload
+
+      console.log(data, type);
       switch (type) {
         case 1:
-          socket.to(roomID).emit("message", data);
-          userMessageCache[roomID].push(JSON.parse(data));
+          Logger.ERROR(roomID);
+          socket.to(roomID).emit("message", JSON.stringify(data));
+          userMessageCache[roomID].push(data);
           break;
         case 2:
           break;
