@@ -239,7 +239,7 @@ function broadcastToPeer(data, WebsocketConnection, RID) {
       client !== WebsocketConnection &&
       client.readyState === WebsocketConnection.OPEN &&
       // @ts-ignore
-      clients[index].room === RID
+      clients[RID][index]
     ) {
       userMessageCache[RID].push(data); // push the parsed data
       client.send(JSON.stringify(data));
