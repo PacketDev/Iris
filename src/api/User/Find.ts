@@ -11,13 +11,13 @@ const app = Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post(`${API_BASE}user/find`, async (req, res) => {
+app.post(`${API_BASE}user/find/:unused`, async (req, res) => {
   const { username, id } = req.body;
   let userRequest;
 
   try {
     userRequest =
-      (await User.findOne({ username })) || (await User.findOne({ UID: id }));
+      (await User.findOne({ username })) || (await User.findOne({ UID: parseInt(id) }));
   } catch (error) {
       return res.sendStatus(400);
     }
