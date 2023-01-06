@@ -1,7 +1,11 @@
 import express from "express";
 import config from "./config/config.json";
 import Logger from "./utils/Logger";
-import { wss } from "./socket/WebSocket";
+// Websocket
+import { ws_main } from "./socket/Websocket";
+import { Server } from "socket.io";
+import { API_BASE } from "./config/config.json";
+/*****************************************   */
 import createDatabase from "./Database/DB";
 import cors from "cors";
 
@@ -62,8 +66,12 @@ const server = app.listen(port, () => {
 
 // Register the WebSocket as a service
 // @ts-ignore
-server.on("upgrade", (request, socket, head) => {
-  wss.handleUpgrade(request, socket, head, (websocket: any) => {
-    wss.emit("connection", websocket, request);
-  });
+const io = new Server(server, {
+  path: `${API_BASE}conversations/socket`,
+  cors: {
+  // NOTICE: Remove debug afterward
+    origin: ["http://127.0.0.1:5173", "http://iris-frontend.fly.dev"],
+  },
 });
+
+ws_main(io);

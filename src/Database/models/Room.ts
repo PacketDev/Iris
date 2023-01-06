@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const roomSchema = new Schema({
   id: { type: String, required: true },
-  type: { type: String, required: true }, // ["conversation" || "guild"]
+  type: { type: String, required: true, default: "CONVERSATION" }, // ["conversation" || "guild"]
   participants: {
     type: Array,
     required: true,
