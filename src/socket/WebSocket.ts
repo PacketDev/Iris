@@ -64,9 +64,9 @@ wss.on("connection", (WebsocketConnection, req) => {
     }
   });
 
-  WebsocketConnection.on("message", async (msg) => {
-    let data: any = {};
-    try {
+WebsocketConnection.on("message", async (msg) => {
+  let data: any = {};
+  try {
       // @ts-ignore
       data = JSON.parse(msg);
     } catch (error) {
@@ -77,8 +77,10 @@ wss.on("connection", (WebsocketConnection, req) => {
     const username: string = data.IAM; // @ts-ignore
     const auth: string = data.auth; // @ts-ignore
     const type: Number = data.type;
+    const params = parseQueryParameters(req.url);
+    let RID: string = params.RID;
+    console.log(RID); // debug RID
     // @ts-ignore
-    let RID: string = req.params.RID; // @ts-ignore
     let guildType_ = null;
     try {
       // @ts-ignore
@@ -234,12 +236,14 @@ function serverMsg(status: Number, content: any) {
  */
 // @ts-ignore
 function broadcastToPeer(data, WebsocketConnection, RID) {
-  wss.clients.forEach((client, index) => {
+  let _index = 0;
+  wss.clients.forEach((client) => {
+  console.log(clients[RID])
     if (
       client !== WebsocketConnection &&
       client.readyState === WebsocketConnection.OPEN &&
       // @ts-ignore
-      clients[RID][index]
+      clients[RID][_index]
     ) {
       userMessageCache[RID].push(data); // push the parsed data
       client.send(JSON.stringify(data));
@@ -247,6 +251,7 @@ function broadcastToPeer(data, WebsocketConnection, RID) {
     } else if (userMessageCache[RID] === null) {
       return (userMessageCache[RID] = []);
     }
+    _index++;
   });
 }
 
