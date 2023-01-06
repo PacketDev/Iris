@@ -17,7 +17,7 @@ app.get(`${API_BASE}user/find`, async (req, res) => {
 
   try {
     userRequest =
-      (await User.findOne({ UID: id })) || (await User.findOne({ username }));
+      (await User.findOne({ username })) || (await User.findOne({ UID: id }));
   } catch (error) {
       return res.sendStatus(400);
     }
