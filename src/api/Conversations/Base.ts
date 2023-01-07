@@ -39,8 +39,8 @@ app.get(`${API_BASE}conversations/:userID`, async (req, res) => {
 
   try {
     let response: any = [];
-    // @ts-ignore
-    user.conversations?.forEach(async (UID, index, array) => {
+    let index = 0;
+    user?.conversations?.forEach(async (UID, _index, array) => {
       // For each user that is a part of the conversations array, we then create a response
       const user = await User.findOne({ UID });
       // console.log(user);
@@ -58,6 +58,7 @@ app.get(`${API_BASE}conversations/:userID`, async (req, res) => {
           Logger.WARN("JOB LEFT HANGING. ABANDONING");
         }
       }
+      index++;
     }); // Return array of user conversations
 
     // Kill job if it's taking too long
