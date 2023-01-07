@@ -151,7 +151,7 @@ function ws_main(io: any) {
         console.log(roomData);
         user?.save();
         recieving_end?.save();
-        roomData.save();
+        roomData.saveWithRetries();
         socket.join(roomID);
       } else {
         Logger.INFO(
@@ -188,7 +188,7 @@ function ws_main(io: any) {
         } else if (!LoggedIn) {
           socket.emit("message", JSON.stringify(serverMsg(1, "SUCCESS")));
           Logger.INFO("Client logged in");
-          socket.emit("message", JSON.stringify(roomData?.messages));
+          socket.emit("context-message", JSON.stringify(roomData?.messages));
           // Join the room
           socket.join(roomID);
           Logger.INFO("[ROOMS]: JOIN SUCCESS");
@@ -204,8 +204,8 @@ function ws_main(io: any) {
             roomData.messages = userMessageCache[roomID] || []; // Empty array in case of bad message
             // @ts-ignore
             console.log("STORED MESSAGES", userMessageCache[roomID] || []);
-            roomData?.save();
-          }, 5000);
+            roomData?.saveWithRetries();
+          }, Math.floor(Math.random() * 10000));
 
           return (LoggedIn = true);
         } else {
@@ -214,7 +214,6 @@ function ws_main(io: any) {
       }
 
       // END check credentials
-      roomMode('{"type": 1, "content": "SERVER HELLO"}');
     }
     // End function roomLogon
 
