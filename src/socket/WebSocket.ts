@@ -159,7 +159,14 @@ function ws_main(io: any) {
         );
         // @ts-ignore
         userMessageCache[roomID] = roomData?.messages;
-        // console.log(roomData?.messages);
+
+        // Duplicate of above but slightly modified
+        if (!user.conversations[RID] || !recieving_end.conversations[RID]) {
+          user?.conversations?.push(RID); // Other person as the RID
+          recieving_end?.conversations?.push(username);
+          user?.save();
+          recieving_end?.save();
+        }
       }
       // END GUILD_PARSE
       console.log(room);
