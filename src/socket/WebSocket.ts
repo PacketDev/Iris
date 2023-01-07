@@ -252,19 +252,19 @@ function ws_main(io: any) {
 
       console.log(data, type);
       switch (type) {
-        case 1:
+        case 1: // Text Message
           Logger.ERROR(roomID);
           socket.to(roomID).emit("message", JSON.stringify(data));
           userMessageCache[roomID].push(data);
           break;
-        case 2:
+        case 2: // Multimedia / Attachments
           break;
-        case 3:
+        case 3: // TBD
           break;
-        default:
+        default: // OnError
           socket
             .to(roomID)
-            .emit("message", JSON.stringify(serverMsg(-1, "BAD_MESSAGE")));
+            .emit("server-message", JSON.stringify(serverMsg(-1, "BAD_MESSAGE")));
       }
       // console.log(data);
       Logger.INFO("Logged IN: " + LoggedIn);

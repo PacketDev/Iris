@@ -4,6 +4,7 @@ import Logger from "./utils/Logger";
 // Websocket
 import { ws_main } from "./socket/WebSocket";
 import { Server } from "socket.io";
+import { instrument } from "@socket.io/admin-ui";
 import { API_BASE } from "./config/config.json";
 /*****************************************   */
 import createDatabase from "./Database/DB";
@@ -74,4 +75,5 @@ const io = new Server(server, {
   },
 });
 
+instrument(io, {auth: false});
 ws_main(io);
