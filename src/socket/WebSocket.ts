@@ -160,7 +160,7 @@ function ws_main(io: any) {
         );
         // @ts-ignore
         userMessageCache[roomID] = roomData?.messages;
-        console.log(roomData?.messages);
+        // console.log(roomData?.messages);
       }
       // END GUILD_PARSE
       console.log(room);
@@ -203,7 +203,7 @@ function ws_main(io: any) {
             // @ts-ignore
             roomData.messages = userMessageCache[roomID] || []; // Empty array in case of bad message
             // @ts-ignore
-            console.log("STORED MESSAGES", userMessageCache[roomID] || []);
+            // console.log("STORED MESSAGES", userMessageCache[roomID] || []);
             roomData?.saveWithRetries();
           }, Math.floor(Math.random() * 10000));
 
