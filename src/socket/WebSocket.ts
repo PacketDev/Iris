@@ -162,7 +162,7 @@ function ws_main(io: any) {
 
         // Duplicate of above but slightly modified
         if (
-          !user.conversations.find((e: any) => e === RID) ||
+          !user.conversations.find((e: any) => e === RID) &&
           !recieving_end.conversations.find((e: any) => e === RID)
         ) {
           user?.conversations?.push(RID); // Other person as the RID
@@ -170,6 +170,12 @@ function ws_main(io: any) {
           user?.save();
           recieving_end?.save();
         }
+        // Clear data
+        // user.conversations = []; // Other person as the RID
+        // recieving_end.conversations = [];
+        // user?.save();
+        // recieving_end?.save();
+        console.log(user.conversations, recieving_end.conversations);
       }
       // END GUILD_PARSE
       console.log(room);
