@@ -52,7 +52,11 @@ app.get(`${API_BASE}conversations/:userID`, async (req, res) => {
         status: user?.status,
       });
       if (index === array.length - 1) {
-        return res.json(response);
+        try {
+          return res.json(response);
+        } catch (error) {
+          Logger.WARN("JOB LEFT HANGING. ABANDONING");
+        }
       }
     }); // Return array of user conversations
 
