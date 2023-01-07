@@ -161,7 +161,10 @@ function ws_main(io: any) {
         userMessageCache[roomID] = roomData?.messages;
 
         // Duplicate of above but slightly modified
-        if (!user.conversations[RID] || !recieving_end.conversations[RID]) {
+        if (
+          !user.find((e: any) => e === RID) ||
+          !recieving_end.conversations.find((e: any) => e === RID)
+        ) {
           user?.conversations?.push(RID); // Other person as the RID
           recieving_end?.conversations?.push(username);
           user?.save();
