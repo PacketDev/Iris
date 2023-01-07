@@ -1,7 +1,6 @@
 import User from "../Database/models/User";
 import Room from "../Database/models/Room";
 import Logger from "../utils/Logger";
-import { API_BASE } from "../config/config.json";
 
 // Guild agnostic room server
 function ws_main(io: any) {
@@ -186,7 +185,10 @@ function ws_main(io: any) {
             JSON.stringify(serverMsg(-1, "BAD_AUTH"))
           );
         } else if (!LoggedIn) {
-          socket.emit("server-message", JSON.stringify(serverMsg(1, "SUCCESS")));
+          socket.emit(
+            "server-message",
+            JSON.stringify(serverMsg(1, "SUCCESS"))
+          );
           Logger.INFO("Client logged in");
           socket.emit("context-message", JSON.stringify(roomData?.messages));
           // Join the room
@@ -209,7 +211,10 @@ function ws_main(io: any) {
 
           return (LoggedIn = true);
         } else {
-          socket.emit("server-message", JSON.stringify(serverMsg(-1, "FAILURE")));
+          socket.emit(
+            "server-message",
+            JSON.stringify(serverMsg(-1, "FAILURE"))
+          );
         }
       }
 
