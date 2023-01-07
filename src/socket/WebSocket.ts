@@ -25,7 +25,7 @@ function ws_main(io: any) {
 
     // Spec Violation
     function specViolation(error: any) {
-      socket.emit("message", JSON.stringify(serverMsg(-1, null)));
+      socket.emit("server-message", JSON.stringify(serverMsg(-1, null)));
       Logger.WARN(error);
       return Logger.WARN("[SOCKET.IO] Spec Violation: Unsupported Format!");
     }
@@ -186,7 +186,7 @@ function ws_main(io: any) {
             JSON.stringify(serverMsg(-1, "BAD_AUTH"))
           );
         } else if (!LoggedIn) {
-          socket.emit("message", JSON.stringify(serverMsg(1, "SUCCESS")));
+          socket.emit("server-message", JSON.stringify(serverMsg(1, "SUCCESS")));
           Logger.INFO("Client logged in");
           socket.emit("context-message", JSON.stringify(roomData?.messages));
           // Join the room
@@ -209,7 +209,7 @@ function ws_main(io: any) {
 
           return (LoggedIn = true);
         } else {
-          socket.emit("message", JSON.stringify(serverMsg(-1, "FAILURE")));
+          socket.emit("server-message", JSON.stringify(serverMsg(-1, "FAILURE")));
         }
       }
 

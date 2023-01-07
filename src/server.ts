@@ -2,7 +2,7 @@ import express from "express";
 import config from "./config/config.json";
 import Logger from "./utils/Logger";
 // Websocket
-import { ws_main } from "./socket/Websocket";
+import { ws_main } from "./socket/WebSocket";
 import { Server } from "socket.io";
 import { API_BASE } from "./config/config.json";
 /*****************************************   */
