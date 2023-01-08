@@ -29,8 +29,8 @@ app.post(`${API_BASE}conversations/:userID/:roomID`, async (req, res) => {
 
   // Check user presence in room
   let Rlength = req.body[0];
-  const RID: Number = parseInt(req.params.roomID);
-  const UID: Number = parseInt(req.params.userID);
+  const RID = req.params.roomID;
+  const UID = parseInt(req.params.userID);
   const user = await User.findOne({ UID }).catch((error) => {
     Logger.ERROR(error);
     return res.status(404).json(Error(ERR_NOTFOUND));
@@ -53,8 +53,7 @@ app.post(`${API_BASE}conversations/:userID/:roomID`, async (req, res) => {
     return res.sendStatus(403);
   }
 
-  const room = await Room.findOne({ id: RID, participants: UID });
-
+  const room = await Room.findOne({ id: RID, participants: UID.toString() });
   if (!room) {
     return res.status(404).json(Error(ERR_RNOTFOUND));
   }
