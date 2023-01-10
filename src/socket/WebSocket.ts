@@ -1,6 +1,20 @@
 import User from "../Database/models/User";
 import Room from "../Database/models/Room";
 import Logger from "../utils/Logger";
+import Axios from "axios";
+
+// https://stackoverflow.com/questions/8495687/split-array-into-chunks
+
+// @ts-ignore
+Array.prototype.chunk = function (size: any) {
+  let result = [];
+
+  while (this.length) {
+    result.push(this.splice(0, size));
+  }
+
+  return result;
+};
 
 // Guild agnostic room server
 function ws_main(io: any) {
@@ -258,13 +272,78 @@ function ws_main(io: any) {
           userMessageCache[roomID].push(data);
           break;
         case 2: // Multimedia / Attachments
+          // 1. Upload data.content to the uFile server using the specification file
+          // 2. Use the endpoint in the "Download File" specification to get the download link to the file
+          // 3. Return that link in the format of
+          // {
+          // type: 2
+          // content: <UPLOAD_URL>
+          // ts: new Date()
+          // }
+          data = JSON.parse(data);
+          let chunk_index = 1;
+          let fuid: string;
+          Axios({
+            method: "post",
+            url: "https://up.ufile.io/v1/upload/create_session",
+            data: new URLSearchParams({
+              file_size: data.size,
+            }),
+            responseType: "json",
+          })
+            .then((response) => {
+              // @ts-ignore
+              fuid = response.fuid;
+              // TODO(ALEX)
+
+              // @ts-ignore
+              data.content.chunk(4000000).forEach((chunk) => {
+                const form = new FormData(); // @ts-ignore
+                form.append("chunk_index", chunk_index);
+                form.append("fuid", fuid);
+                form.append("file", new File([""], chunk));
+
+                Axios({
+                  method: "post",
+                  url: "https://up.ufile.io/v1/upload/chunk",
+                  data: form,
+                });
+
+                chunk_index++;
+              }); // Split into 4MB chunks
+            })
+            .then(() => {
+              Axios({
+                method: "post",
+                url: "https://up.ufile.io/v1/upload/finalise",
+
+                data: new URLSearchParams({
+                  // TODO(ALEX)
+                  fuid,
+                  file_name: data.filename,
+                  file_type: data.mimetype,
+                  total_chunks: chunk_index,
+                }),
+              });
+            });
+
+          Axios({
+            url: "https://ufile.io/v1/download/FILE_SLUG",
+            headers: {
+              // TODO(ALEX)
+              "X-API-KEY": "",
+            },
+          });
           break;
         case 3: // TBD
           break;
         default: // OnError
           socket
             .to(roomID)
-            .emit("server-message", JSON.stringify(serverMsg(-1, "BAD_MESSAGE")));
+            .emit(
+              "server-message",
+              JSON.stringify(serverMsg(-1, "BAD_MESSAGE"))
+            );
       }
       // console.log(data);
       Logger.INFO("Logged IN: " + LoggedIn);
