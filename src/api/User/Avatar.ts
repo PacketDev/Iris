@@ -31,10 +31,9 @@ const ERR_NOTFOUND =
    @authentication Must be present
 */
 
-app.post(`${API_BASE}user/avatar/:userID`, async (req, res) => {
+app.post(`${API_BASE}user/avatar/`, async (req, res) => {
   // Find user
   let Authorization = req.headers.authorization;
-  const UID: string = req.params.userID;
   const Avatar: string = req.body.avatar;
 
   // @ts-ignore
@@ -49,10 +48,7 @@ app.post(`${API_BASE}user/avatar/:userID`, async (req, res) => {
     return res.sendStatus(422);
   }
   try {
-    if (!req.params.userID || req.params.userID === null) {
-      return res.sendStatus(422);
-    }
-    const user = await User.findOne({ UID }).catch((error) => {
+    const user = await User.findOne({ token: Authorization }).catch((error) => {
       Logger.ERROR(error);
       return res.status(404).json(Error(ERR_NOTFOUND));
     });
@@ -95,10 +91,9 @@ app.post(`${API_BASE}user/avatar/:userID`, async (req, res) => {
   }
 });
 
-app.delete(`${API_BASE}user/avatar/:userID`, async (req, res) => {
+app.delete(`${API_BASE}user/avatar/`, async (req, res) => {
   // Find user
   let Authorization = req.headers.authorization;
-  const UID: string = req.params.userID;
 
   // @ts-ignore
   if (Authorization) {
@@ -113,10 +108,7 @@ app.delete(`${API_BASE}user/avatar/:userID`, async (req, res) => {
   }
 
   try {
-    if (!req.params.userID || req.params.userID === null) {
-      return res.sendStatus(422);
-    }
-    const user = await User.findOne({ UID }).catch((error) => {
+    const user = await User.findOne({ token: Authorization }).catch((error) => {
       Logger.ERROR(error);
       return res.status(404).json(Error(ERR_NOTFOUND));
     });

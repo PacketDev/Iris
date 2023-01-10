@@ -10,7 +10,7 @@ const app = Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get(`${API_BASE}conversations/:userID`, async (req, res) => {
+app.get(`${API_BASE}conversations/`, async (req, res) => {
   let Authorization = req.headers.authorization;
 
   // @ts-ignore
@@ -29,7 +29,6 @@ app.get(`${API_BASE}conversations/:userID`, async (req, res) => {
 
   try {
     userRequest = await User.findOne({
-      UID: req.params["userID"],
       token: Authorization,
     });
   } catch (error) {
@@ -40,7 +39,7 @@ app.get(`${API_BASE}conversations/:userID`, async (req, res) => {
   try {
     let response: any = [];
     let index = 0;
-    user?.conversations?.forEach(async (UID, _index, array) => {
+    user?.conversations?.forEach(async (UID: any, _index: any, array) => {
       // For each user that is a part of the conversations array, we then create a response
       const user = await User.findOne({ UID });
       // console.log(user);

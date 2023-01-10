@@ -25,10 +25,9 @@ app.use(express.urlencoded({ extended: false }));
    @authentication Must be present
 */
 
-app.post(`${API_BASE}user/about/:userID`, async (req, res) => {
+app.post(`${API_BASE}user/about/`, async (req, res) => {
   // Find user
   let Authorization = req.headers.authorization;
-  const UID: string = req.params.userID;
   const About: string = req.body.aboutme;
 
   // @ts-ignore
@@ -43,10 +42,7 @@ app.post(`${API_BASE}user/about/:userID`, async (req, res) => {
     return res.sendStatus(422);
   }
   try {
-    if (!req.params.userID || req.params.userID === null) {
-      return res.sendStatus(422);
-    }
-    const user = await User.findOne({ UID }).catch((error) => {
+    const user = await User.findOne({ token: Authorization }).catch((error) => {
       Logger.ERROR(error);
       return res.status(404).json(Error(ERR_NOTFOUND));
     });
@@ -89,10 +85,9 @@ app.post(`${API_BASE}user/about/:userID`, async (req, res) => {
   }
 });
 
-app.delete(`${API_BASE}user/about/:userID`, async (req, res) => {
+app.delete(`${API_BASE}user/about/`, async (req, res) => {
   // Find user
   let Authorization = req.headers.authorization;
-  const UID: string = req.params.userID;
 
   // @ts-ignore
   if (Authorization) {
@@ -107,10 +102,7 @@ app.delete(`${API_BASE}user/about/:userID`, async (req, res) => {
   }
 
   try {
-    if (!req.params.userID || req.params.userID === null) {
-      return res.sendStatus(422);
-    }
-    const user = await User.findOne({ UID }).catch((error) => {
+    const user = await User.findOne({ token: Authorization }).catch((error) => {
       Logger.ERROR(error);
       return res.status(404).json(Error(ERR_NOTFOUND));
     });

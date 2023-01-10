@@ -18,9 +18,8 @@ const ERR_NOTFOUND =
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post(`${API_BASE}user/preferences/:userID`, async (req, res) => {
+app.post(`${API_BASE}user/preferences/`, async (req, res) => {
   let Authorization = req.headers.authorization;
-  const UID: string = req.params.userID;
   const Preference: string = req.body;
 
   if (Authorization) {
@@ -34,11 +33,7 @@ app.post(`${API_BASE}user/preferences/:userID`, async (req, res) => {
   }
 
   try {
-    if (!req.params.userID || req.params.userID === null) {
-      return res.sendStatus(422);
-    }
-
-    const user: any = await User.findOne({ UID }).catch((error) => {
+    const user: any = await User.findOne({ token: Authorization }).catch((error) => {
       Logger.ERROR(error);
       return res.status(404).json(Error(ERR_NOTFOUND));
     });
@@ -79,9 +74,8 @@ app.post(`${API_BASE}user/preferences/:userID`, async (req, res) => {
   }
 });
 
-app.delete(`${API_BASE}user/preferences/:userID`, async (req, res) => {
+app.delete(`${API_BASE}user/preferences/`, async (req, res) => {
   let Authorization = req.headers.authorization;
-  const UID: string = req.params.userID;
 
   if (Authorization) {
     if (Authorization.startsWith("Bearer ")) {
@@ -94,11 +88,7 @@ app.delete(`${API_BASE}user/preferences/:userID`, async (req, res) => {
   }
 
   try {
-    if (!req.params.userID || req.params.userID === null) {
-      return res.sendStatus(422);
-    }
-
-    const user = await User.findOne({ UID }).catch((error) => {
+    const user = await User.findOne({ token: Authorization }).catch((error) => {
       Logger.ERROR(error);
       return res.status(404).json(Error(ERR_NOTFOUND));
     });
