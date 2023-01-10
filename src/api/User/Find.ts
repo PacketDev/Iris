@@ -11,7 +11,7 @@ const app = Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post(`${API_BASE}user/find/`, async (req, res) => {
+app.post(`${API_BASE}user/global/find/`, async (req, res) => {
   const { username, id } = req.body;
   let userRequest;
 
