@@ -1,7 +1,7 @@
 # fly.toml file generated for iris-api on 2022-12-29T18:56:47-06:00
 
 app = "iris-api"
-kill_signal = "SIGINT"
+kill_signal = "SIGTERM"
 kill_timeout = 5
 processes = []
 

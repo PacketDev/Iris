@@ -1,20 +1,7 @@
 import User from "../Database/models/User";
 import Room from "../Database/models/Room";
 import Logger from "../utils/Logger";
-import Axios from "axios";
-
-// https://stackoverflow.com/questions/8495687/split-array-into-chunks
-
-// @ts-ignore
-Array.prototype.chunk = function (size: any) {
-  let result = [];
-
-  while (this.length) {
-    result.push(this.splice(0, size));
-  }
-
-  return result;
-};
+import Axios, { AxiosError } from "axios";
 
 // Guild agnostic room server
 function ws_main(io: any) {
@@ -264,7 +251,9 @@ function ws_main(io: any) {
       type = data.type;
       // END reload
 
-      console.log(data, type);
+      if (data.length < 100) {
+        console.log(data, type);
+      }
       switch (type) {
         case 1: // Text Message
           Logger.ERROR(roomID);
@@ -280,60 +269,154 @@ function ws_main(io: any) {
           // content: <UPLOAD_URL>
           // ts: new Date()
           // }
-          data = JSON.parse(data);
-          let chunk_index = 1;
-          let fuid: string;
+          type type2 = {
+            type: number;
+            content: Buffer;
+            description: string;
+            size: number;
+            filename: string;
+            mimetype: string;
+            ts: number;
+          };
+
+          console.log("[FILETRANSFER.IO] STARTING FILE TRANSFER...");
+          // data = JSON.parse(data); // The data is already parsed
+
+          let server_host: string;
+          let server_protocol: string;
+          // Skeleton object
+          type fdata_skeleton = {
+            uploadUrl: string;
+            uploadToken: string;
+            maxBytes: Number;
+            success: Boolean;
+            ownerDetailLink: string;
+            state: any[];
+            snippets: {
+              "snippet--upload-progress": string;
+              "snippet--header": string;
+              "snippet--footer": string;
+            };
+          };
+          let fdata: fdata_skeleton;
+          // Create new session
           Axios({
-            method: "post",
-            url: "https://up.ufile.io/v1/upload/create_session",
-            data: new URLSearchParams({
-              file_size: data.size,
-            }),
+            method: "GET",
+            url: "https://filetransfer.io/start-upload",
+
+            headers: {
+              "X-Requested-With": "XMLHttpRequest",
+            },
+
+            withCredentials: true,
             responseType: "json",
           })
             .then((response) => {
+              // console.log(response);
               // @ts-ignore
-              fuid = response.fuid;
-              // TODO(ALEX)
+              fdata = response.data;
+              console.log(fdata.uploadUrl);
+              server_host = new URL(fdata.uploadUrl).hostname;
+              server_protocol = new URL(fdata.uploadUrl).protocol;
 
-              // @ts-ignore
-              data.content.chunk(4000000).forEach((chunk) => {
-                const form = new FormData(); // @ts-ignore
-                form.append("chunk_index", chunk_index);
-                form.append("fuid", fuid);
-                form.append("file", new File([""], chunk));
+              if (response.status != 200) {
+                Logger.ERROR("[FILETRANSFER.IO] SERVER REQUEST FAILED");
+                return;
+              }
+              console.log(
+                data.size,
+                `filename ${Buffer.from(data.filename).toString(
+                  "base64"
+                )},filetype ${Buffer.from(data.mimetype).toString(
+                  "base64"
+                )},fileorder MQ==`
+              ); // Strictly no spaces whatsoever
+              // Reserve the session
+              Axios({
+                method: "POST",
+                url: fdata.uploadUrl,
+                headers: {
+                  "Upload-Length": data.size,
+                  "Upload-Metadata": `filename ${Buffer.from(
+                    data.filename
+                  ).toString("base64")},filetype ${Buffer.from(
+                    data.mimetype
+                  ).toString("base64")},fileorder MQ==`, // Strictly no spaces whatsoever
+                  "Tus-Resumable": "1.0.0",
+                },
+              }).then((response) => {
+                console.log("The session has been reserved.");
+                // Upload the data
+
+                if (response.status != 201) {
+                  Logger.ERROR("[FILETRANSFER.IO] SERVER REQUEST FAILED");
+                  return;
+                }
+                // @ts-ignore
+                const chunk_host = response.headers.get("Location");
+                console.log(`${server_protocol}//${server_host}${chunk_host}`);
+                console.log(
+                  `${server_protocol}//${server_host}${chunk_host}`,
+                  data.size
+                );
 
                 Axios({
-                  method: "post",
-                  url: "https://up.ufile.io/v1/upload/chunk",
-                  data: form,
-                });
+                  url: `${server_protocol}//${server_host}${chunk_host}`,
+                  // @ts-ignore
 
-                chunk_index++;
-              }); // Split into 4MB chunks
-            })
-            .then(() => {
-              Axios({
-                method: "post",
-                url: "https://up.ufile.io/v1/upload/finalise",
+                  headers: {
+                    "Content-Length": data.size,
+                    "Content-Type": "application/offset+octet-stream",
+                    "Upload-Offset": "0",
+                    "Tus-Resumable": "1.0.0",
+                  },
+                  method: "PATCH",
+                  data: data.content,
+                })
+                  .then((response) => {
+                    if (response.status != 200) {
+                      Logger.ERROR("[FILETRANSFER.IO] CHUNK UPLOAD FAILED");
+                      return;
+                    }
+                  })
+                  .then(() => {
+                    console.log(
+                      `https://filetransfer.io/finish-delivery/${fdata.uploadToken}`
+                    );
+                    Axios({
+                      method: "POST",
+                      url: `https://filetransfer.io/finish-delivery/${fdata.uploadToken}`,
+                      headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                      },
+                      responseType: "json",
+                    })
+                      .then((res) => console.log(res.data))
 
-                data: new URLSearchParams({
-                  // TODO(ALEX)
-                  fuid,
-                  file_name: data.filename,
-                  file_type: data.mimetype,
-                  total_chunks: chunk_index,
-                }),
+                      .catch((error) => {
+                        const err = error as AxiosError;
+                        if (err.response) {
+                          console.log(err.response.status);
+                          console.log(err.request);
+                          console.log(err.response.data);
+                        } else {
+                          console.log(err);
+                        }
+                      });
+                    console.log(`Successfully uploaded ${data.filename}`);
+                  });
               });
+            })
+            .catch((error) => {
+              const err = error as AxiosError;
+              if (err.response) {
+                console.log(err.response.status);
+                console.log(err.response.data);
+              } else {
+                console.log(err);
+              }
             });
 
-          Axios({
-            url: "https://ufile.io/v1/download/FILE_SLUG",
-            headers: {
-              // TODO(ALEX)
-              "X-API-KEY": "",
-            },
-          });
           break;
         case 3: // TBD
           break;
