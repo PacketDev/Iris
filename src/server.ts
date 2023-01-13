@@ -40,6 +40,7 @@ const io = new Server(server, {
       "https://admin.socket.io",
     ],
   },
+  maxHttpBufferSize: 1e8, // 100MB
 });
 
 instrument(io, { auth: false });
