@@ -442,7 +442,7 @@ function ws_main(io: any) {
                         function messageAsMe(content: any) {
                           socket.emit(
                             "message",
-                            JSON.stringify(userMsg(data.IAM, content))
+                            JSON.stringify(userMsg(data.IAM, content, data.description))
                           );
                         }
                         console.log(`Successfully uploaded ${data.filename}`);
@@ -495,12 +495,13 @@ function serverMsg(status: Number, content: any) {
   };
 }
 
-function userMsg(UID: any, content: any) {
+function userMsg(UID: any, content: any, desc: string) {
   return {
     type: 2,
     IAM: UID,
     auth: null,
     content: content,
+    description: desc,
     ts: Date.now(),
   };
 }
