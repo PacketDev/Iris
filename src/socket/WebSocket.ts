@@ -269,6 +269,7 @@ function ws_main(io: any) {
           // content: <UPLOAD_URL>
           // ts: new Date()
           // }
+
           socket.emit(
             "server-message",
             JSON.stringify(serverMsg(1, "RENDERING..."))
@@ -415,27 +416,26 @@ function ws_main(io: any) {
                     })
                       .then((res) => {
                         console.log(res.data); // @ts-ignore
-
+                        const deliveryLink =
+                          res.data.deliveryPublicLink.split("#")[0];
                         if (/image.*/.test(data.mimetype)) {
                           messageAsMe(
-                            `<img src="${
-                              res.data.deliveryPublicLink + "/download"
-                            }/>`
+                            `<img src="${deliveryLink + "/download"}" />`
                           );
                         } else if (/video.*/.test(data.mimetype)) {
                           messageAsMe(`
                         <video controls>
-                           <source src="${
-                             res.data.deliveryPublicLink + "/download"
-                           }" type=${data.mimetype}>
+                           <source src="${deliveryLink + "/download"}" type=${
+                            data.mimetype
+                          }>
                           Your browser does not support the HTML5 video element
                         </video>
                         `);
                         } else {
                           messageAsMe(
                             `<a href="${
-                              res.data.deliveryPublicLink + "/download"
-                            }">${res.data.deliveryPublicLink}</a>`
+                              deliveryLink + "/download"
+                            }">${deliveryLink}</a>`
                           );
                         }
 
