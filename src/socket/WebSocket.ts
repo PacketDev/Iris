@@ -446,6 +446,16 @@ function ws_main(io: any) {
                               userMsg(data.IAM, content, data.description)
                             )
                           );
+
+                          socket
+                            .to(roomID)
+                            .emit(
+                              "message",
+                              JSON.stringify(
+                                userMsg(data.IAM, content, data.description)
+                              )
+                            );
+
                           // Append the message everytime
                           userMessageCache[roomID].push(
                             userMsg(data.IAM, content, data.description)
