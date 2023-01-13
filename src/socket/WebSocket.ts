@@ -34,8 +34,11 @@ function ws_main(io: any) {
       Logger.WARN(ip + " disconnected.");
       //   Try and remove the thread
       try {
-        Logger.INFO("KILL THREAD SAVE");
         clearInterval(saveThread);
+        Logger.INFO("KILL THREAD SAVE");
+        // Bring the user offline
+        user.status = "offline";
+        user.save();
         Logger.INFO("REMOVED USER");
       } catch (error) {
         Logger.WARN(`No threads were ever assigned to ${ip}`);
@@ -98,6 +101,10 @@ function ws_main(io: any) {
 
       user ? 1 : (user = user_);
       user_ = undefined; // Cleanup
+
+      // Bring the user online
+      user.status = "online";
+      user.save();
       joinRoom(roomID); // Loop back
     }
     // END Function Login
