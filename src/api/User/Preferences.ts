@@ -58,7 +58,7 @@ app.post(`${API_BASE}user/preferences/`, async (req, res) => {
     // set Preferences
     if (Preference && Preference != "" && user) {
       // @ts-ignore
-      user.preferences = Preference;
+      user.preferences = JSON.stringify(Preference);
       user.save();
 
       return res.json({
@@ -112,7 +112,7 @@ app.delete(`${API_BASE}user/preferences/`, async (req, res) => {
 
     // set Preferences
     // @ts-ignore
-    user.preferences = { theme: "light" };
+    user.preferences = JSON.stringify({ theme: "light" });
 
     // @ts-ignore
     user.save();
