@@ -32,10 +32,15 @@ const server = app.listen(port, () => {
 const io = new Server(server, {
   path: `${API_BASE}conversations/socket`,
   cors: {
-  // NOTICE: Remove debug afterward
-    origin: ["http://127.0.0.1:5173", "http://iris-frontend.fly.dev", "https://admin.socket.io"],
+    // NOTICE: Remove debug afterward
+    origin: [
+      "http://127.0.0.1:5173",
+      "http://iris-frontend.fly.dev",
+      "https://iris-frontend.fly.dev",
+      "https://admin.socket.io",
+    ],
   },
 });
 
-instrument(io, {auth: false});
+instrument(io, { auth: false });
 ws_main(io);
