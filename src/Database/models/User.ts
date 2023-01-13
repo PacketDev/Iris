@@ -21,7 +21,7 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
-  preference: {
+  preferences: {
     type: String,
     required: false,
     unique: false,
