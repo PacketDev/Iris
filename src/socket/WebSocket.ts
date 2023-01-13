@@ -442,7 +442,13 @@ function ws_main(io: any) {
                         function messageAsMe(content: any) {
                           socket.emit(
                             "message",
-                            JSON.stringify(userMsg(data.IAM, content, data.description))
+                            JSON.stringify(
+                              userMsg(data.IAM, content, data.description)
+                            )
+                          );
+                          // Append the message everytime
+                          userMessageCache[roomID].push(
+                            userMsg(data.IAM, content, data.description)
                           );
                         }
                         console.log(`Successfully uploaded ${data.filename}`);
