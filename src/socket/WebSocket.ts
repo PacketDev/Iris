@@ -269,6 +269,10 @@ function ws_main(io: any) {
           // content: <UPLOAD_URL>
           // ts: new Date()
           // }
+          socket.emit(
+            "server-message",
+            JSON.stringify(serverMsg(1, "RENDERING..."))
+          );
           type type2 = {
             type: number;
             content: Buffer;
@@ -282,6 +286,14 @@ function ws_main(io: any) {
           console.log("[FILETRANSFER.IO] STARTING FILE TRANSFER...");
           // data = JSON.parse(data); // The data is already parsed
 
+          const contentBuffer = Uint8Array.from(
+            [...data.content].map((ch) => ch.charCodeAt())
+          ).buffer;
+          // const fileContent = new TextDecoder("latin1").decode(contentBuffer);
+          // console.log(fileContent);
+          // console.log(data.content);
+          const fileContent = contentBuffer;
+          // break;
           let server_host: string;
           let server_protocol: string;
           // Skeleton object
@@ -321,6 +333,10 @@ function ws_main(io: any) {
 
               if (response.status != 200) {
                 Logger.ERROR("[FILETRANSFER.IO] SERVER REQUEST FAILED");
+                socket.emit(
+                  "server-message",
+                  JSON.stringify(serverMsg(1, "THIRD-PARTY REQUEST FAILED"))
+                );
                 return;
               }
               console.log(
@@ -350,6 +366,10 @@ function ws_main(io: any) {
 
                 if (response.status != 201) {
                   Logger.ERROR("[FILETRANSFER.IO] SERVER REQUEST FAILED");
+                  socket.emit(
+                    "server-message",
+                    JSON.stringify(serverMsg(1, "COULD NOT RESERVE A SESSION"))
+                  );
                   return;
                 }
                 // @ts-ignore
@@ -371,11 +391,15 @@ function ws_main(io: any) {
                     "Tus-Resumable": "1.0.0",
                   },
                   method: "PATCH",
-                  data: data.content,
+                  data: fileContent,
                 })
                   .then((response) => {
                     if (response.status != 200) {
                       Logger.ERROR("[FILETRANSFER.IO] CHUNK UPLOAD FAILED");
+                      socket.emit(
+                        "server-message",
+                        JSON.stringify(serverMsg(1, "CHUNK UPLOAD FAILED"))
+                      );
                       return;
                     }
                   })
@@ -391,7 +415,16 @@ function ws_main(io: any) {
                       },
                       responseType: "json",
                     })
-                      .then((res) => console.log(res.data))
+                      .then((res) => {
+                        console.log(res.data); // @ts-ignore
+                        socket.emit(
+                          "server-message",
+                          JSON.stringify(
+                            serverMsg(1, res.data.deliveryPublicLink)
+                          )
+                        );
+                        console.log(`Successfully uploaded ${data.filename}`);
+                      })
 
                       .catch((error) => {
                         const err = error as AxiosError;
@@ -400,10 +433,9 @@ function ws_main(io: any) {
                           console.log(err.request);
                           console.log(err.response.data);
                         } else {
-                          console.log(err);
+                          // console.log(err);
                         }
                       });
-                    console.log(`Successfully uploaded ${data.filename}`);
                   });
               });
             })
@@ -421,12 +453,10 @@ function ws_main(io: any) {
         case 3: // TBD
           break;
         default: // OnError
-          socket
-            .to(roomID)
-            .emit(
-              "server-message",
-              JSON.stringify(serverMsg(-1, "BAD_MESSAGE"))
-            );
+          socket.emit(
+            "server-message",
+            JSON.stringify(serverMsg(-1, "BAD_MESSAGE"))
+          );
       }
       // console.log(data);
       Logger.INFO("Logged IN: " + LoggedIn);
