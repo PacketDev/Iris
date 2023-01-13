@@ -1,8 +1,9 @@
 /*
- * Preferences API [POST/DEL] - Requires authentication
+ * Preferences API [POST/DEL/GET] - Requires authentication
  * What it does: takes in JSON and appends to user.preferences database schema member
  * onPOST = Modify preferences
  * onDELETE = Reset to default
+ * onGET = Return preferences as-is
  */
 
 import express, { Router } from "express";
@@ -33,10 +34,12 @@ app.post(`${API_BASE}user/preferences/`, async (req, res) => {
   }
 
   try {
-    const user: any = await User.findOne({ token: Authorization }).catch((error) => {
-      Logger.ERROR(error);
-      return res.status(404).json(Error(ERR_NOTFOUND));
-    });
+    const user: any = await User.findOne({ token: Authorization }).catch(
+      (error) => {
+        Logger.ERROR(error);
+        return res.status(404).json(Error(ERR_NOTFOUND));
+      }
+    );
 
     if (!user) {
       return res.status(404).json(Error(ERR_NOTFOUND));
@@ -109,10 +112,56 @@ app.delete(`${API_BASE}user/preferences/`, async (req, res) => {
 
     // set Preferences
     // @ts-ignore
-    user.preferences = "Hi this a test!";
+    user.preferences = { theme: "light" };
 
     // @ts-ignore
     user.save();
+
+    return res.json({
+      // @ts-ignore
+      preferences: user.preferences,
+      // @ts-ignore
+      UID: user.UID,
+      // @ts-ignore
+      username: user.username,
+    });
+  } catch (err) {
+    Logger.ERROR(err);
+  }
+});
+
+app.get(`${API_BASE}user/preferences/`, async (req, res) => {
+  let Authorization = req.headers.authorization;
+
+  if (Authorization) {
+    if (Authorization.startsWith("Bearer ")) {
+      Authorization = Authorization.substring(7, Authorization.length);
+    } else {
+      res.sendStatus(422);
+    }
+  } else {
+    return res.sendStatus(422);
+  }
+
+  try {
+    const user = await User.findOne({ token: Authorization }).catch((error) => {
+      Logger.ERROR(error);
+      return res.status(404).json(Error(ERR_NOTFOUND));
+    });
+
+    if (!user) {
+      return res.status(404).json(Error(ERR_NOTFOUND));
+    }
+
+    if (Authorization) {
+      // @ts-ignore
+      const isValidPassword = Authorization === user.token;
+      if (!isValidPassword) {
+        return res.sendStatus(403);
+      }
+    } else {
+      return res.sendStatus(403);
+    }
 
     return res.json({
       // @ts-ignore
