@@ -284,14 +284,12 @@ function ws_main(io: any) {
           };
 
           console.log("[FILETRANSFER.IO] STARTING FILE TRANSFER...");
-          // data = JSON.parse(data); // The data is already parsed
+          // data = JSON.parse(data); // The data is already parsed - we dont need to do this
 
+          // The server only accepts "Uint8Array"s since it will textDecode after uploaded
           const contentBuffer = Uint8Array.from(
             [...data.content].map((ch) => ch.charCodeAt())
           ).buffer;
-          // const fileContent = new TextDecoder("latin1").decode(contentBuffer);
-          // console.log(fileContent);
-          // console.log(data.content);
           const fileContent = contentBuffer;
           // break;
           let server_host: string;
@@ -417,12 +415,36 @@ function ws_main(io: any) {
                     })
                       .then((res) => {
                         console.log(res.data); // @ts-ignore
-                        socket.emit(
-                          "server-message",
-                          JSON.stringify(
-                            serverMsg(1, res.data.deliveryPublicLink)
-                          )
-                        );
+
+                        if (/image.*/.test(data.mimetype)) {
+                          messageAsMe(
+                            `<img src="${
+                              res.data.deliveryPublicLink + "/download"
+                            }/>`
+                          );
+                        } else if (/video.*/.test(data.mimetype)) {
+                          messageAsMe(`
+                        <video controls>
+                           <source src="${
+                             res.data.deliveryPublicLink + "/download"
+                           }" type=${data.mimetype}>
+                          Your browser does not support the HTML5 video element
+                        </video>
+                        `);
+                        } else {
+                          messageAsMe(
+                            `<a href="${
+                              res.data.deliveryPublicLink + "/download"
+                            }">${res.data.deliveryPublicLink}</a>`
+                          );
+                        }
+
+                        function messageAsMe(content: any) {
+                          socket.emit(
+                            "message",
+                            JSON.stringify(userMsg(data.IAM, content))
+                          );
+                        }
                         console.log(`Successfully uploaded ${data.filename}`);
                       })
 
@@ -470,6 +492,16 @@ function serverMsg(status: Number, content: any) {
     type: 0,
     status: status,
     content: content,
+  };
+}
+
+function userMsg(UID: any, content: any) {
+  return {
+    type: 2,
+    IAM: UID,
+    auth: null,
+    content: content,
+    ts: Date.now(),
   };
 }
 
