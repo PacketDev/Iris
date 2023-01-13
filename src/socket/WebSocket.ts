@@ -37,8 +37,8 @@ function ws_main(io: any) {
         clearInterval(saveThread);
         Logger.INFO("KILL THREAD SAVE");
         // Bring the user offline
-        user.status = "offline";
-        user.save();
+        // user.status = "offline";
+        // user.save(); // Disabled because it doesnt restore status
         Logger.INFO("REMOVED USER");
       } catch (error) {
         Logger.WARN(`No threads were ever assigned to ${ip}`);
@@ -103,8 +103,8 @@ function ws_main(io: any) {
       user_ = undefined; // Cleanup
 
       // Bring the user online
-      user.status = "online";
-      user.save();
+      // user.status = "online";
+      // user.save(); // Disabled because it doesnt store status
       joinRoom(roomID); // Loop back
     }
     // END Function Login
