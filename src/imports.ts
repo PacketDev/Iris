@@ -6,9 +6,6 @@ import CNIX from "./api/Conversations/UNIX";
 import CFND from "./api/Friend/create";
 import OFND from "./api/Friend/outgoing";
 import PFND from "./api/Friend/pending";
-import GDEL from "./api/Guild/Delete";
-import GEDT from "./api/Guild/Edit";
-import GMSG from "./api/Guild/Message";
 import UABT from "./api/User/About";
 import UAVT from "./api/User/Avatar";
 import PREF from "./api/User/Preferences";
@@ -30,9 +27,6 @@ app.use([
   CFND,
   OFND,
   PFND,
-  GDEL,
-  GEDT,
-  GMSG,
   UABT,
   UAVT,
   PREF,
