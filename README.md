@@ -1,2 +1,2 @@
-# Iris - Backend
-Iris's Backend
+# Ether - Backend
+Ether's Backend
