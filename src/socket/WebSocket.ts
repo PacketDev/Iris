@@ -2,6 +2,7 @@ import User from "../Database/models/User";
 import Room from "../Database/models/Room";
 import Logger from "../utils/Logger";
 import Axios, { AxiosError } from "axios";
+import { filetransfer_key } from "../config/config.json";
 
 // Guild agnostic room server
 function ws_main(io: any) {
@@ -324,8 +325,7 @@ function ws_main(io: any) {
 
             headers: {
               "X-Requested-With": "XMLHttpRequest",
-              cookie:
-                "admin_yQyoPwSl=zPQoJNf25jAObwa4ILrarivtRIbmIFnh; admin_0TZABwH6=3Bs5v65OhIQ5Mg7VzCa1LWNtMds6NxQI; admin_7ZToJHP8=HOw0weUYCs4o2P0fW2ka8d51XYYD3uZT; admin_5GDQIZql=2vabWLJoNfzjFkYWqAcn3x2upZKzd3Kq; admin_IDX4chKx=B2ugjYtDDnu4yxYuf6IFfuL2SJDlFo47; admin_UV5e9HmL=zyftfcaVwGxhhaYFYDJyR2JwFIE0UL8m; admin_VdOBBDED=fjgnRQY4G2u3MqFpg0UOyaf30XG35uaX; admin_BVeWfef6=SrJRo5T9WBCg3ewCDa2cfjbTk3hTTBaH; admin_OPUbwx44=8YOan8MJ0foLqr17lSkJVBtN4EJR410F; admin_fDiWZMOJ=hkMkrCmQ2bIqCjjVYAYCBjc7idEjDfHV; admin_p46pOUEH=3QPbnbi5wnOTwGUkValr3DdoV9GMksxF; admin_rvTJ2xVE=VmiYDFT1xWupm2SXSzcUeedTt2FGdTg1; admin_L97o5RIk=C8TJAZiwUj1esA6GzlRN288XDD0E53FA; admin_i9aC1BWb=2pSskyWELbwFvwolsQZDfp4tWMDXB46t; admin_nyhK4bWT=XaFgn80xaIu7dhlJH51DYoZhqiRdnmZK; admin_OXJ7rN7Y=B0IhmzWZXKHd8HkavB1iLBAu4djf38nv; admin_f0F0ocdR=gwGg4Rv1VOeF1iHWPVg64LXRk5V4V4Rl; PHPSESSID=e68c0f63ec2daca1d3610908c14fe06c; permanentLogin=QkFYUEZpUnlNWExUWjZRdWdrejdKNWxURnA5SWQ1dVd4RG5mdUthZzFadXlvNTNOaFo3cFpYZ1pyQURLTkZrZ0VXSlBoZjFvNjl1L2w2TlNjVHFIUXc9PTpYN3RyVzdXMnB4ZW5vZHR6UlovaDZCYm4yUndFeTlIQzdWaFBZbys5UHdzRGxFb1FqU1JPbDhhdStiZ2Q3RUJjcG1NWEk0MGFNQWhDV2FDVHZpUXN1QT09; nette-samesite=1; browserTimeZone=America/Guatemala",
+              cookie: filetransfer_key,
             },
 
             withCredentials: true,
