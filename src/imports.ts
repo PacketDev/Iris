@@ -13,6 +13,7 @@ import USTS from "./api/User/Status";
 import URID from "./api/User/UID";
 import UFND from "./api/User/Find";
 import VERSION from "./api/Version/Base";
+import { WS } from "./socket/WebSocket";
 
 import express from "express";
 
@@ -34,6 +35,7 @@ app.use([
   URID,
   UFND,
   VERSION,
+  WS,
 ]);
 
 export = app;
