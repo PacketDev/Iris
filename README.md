@@ -1,7 +1,7 @@
-# Ether - Backend
+# Ether — Backend
 _It's a social app_
 
-Ether's Backend. Pair this along with [EtherComm/Ether](https://github.com/EtherComm/Ether)
+Ether's Backend. Pair this along with [EtherComm/etherfrontend](https://github.com/EtherComm/etherfrontend)
 
 ## Running the server
 Ether can be accessed [online](https://iris-frontend.fly.dev).
@@ -28,8 +28,8 @@ $ npm install
 
 If everything works, the serveroutput should read 'Iris:Server running on port [8080]'
 
-## Running the frontend
 
+## Running the frontend
 Next, open a new terminal and navigate to the frontend folder `etherfrontend`
 
 Enter the following commands:
