@@ -22,9 +22,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 createDatabase();
+// Set ServerName
+const ServerName = `Iris.${
+  process.env.NODE_ENV || "dev"
+}.${require("os").hostname() || 'container'}.${process.platform}.${
+  process.env.PROCESSOR_ARCHITECTURE || "undefined"
+}#${process.pid}`;
 
 const server = app.listen(port, () => {
-  Logger.INFO(`Iris:Server running on port [${port}]`);
+  Logger.INFO(`Iris:Server running on port [${port}]\nSERVER_ID: ${ServerName}`);
 });
 
 // Register the WebSocket as a service
@@ -50,5 +56,7 @@ instrument(io, {
     password: "$2a$10$Eel5o0U7zieUkPLPDcHbru3eOGZ1hbiQkKBPAfT8BGwgWEK4GhR42",
   },
   mode: "development",
+  namespaceName: "/admin",
+  serverId: ServerName,
 });
 ws_main(io);
