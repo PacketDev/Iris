@@ -43,5 +43,12 @@ const io = new Server(server, {
   maxHttpBufferSize: 1e8, // 100MB
 });
 
-instrument(io, { auth: false });
+instrument(io, {
+  auth: {
+    type: "basic",
+    username: "orchestrator",
+    password: "$2a$10$Eel5o0U7zieUkPLPDcHbru3eOGZ1hbiQkKBPAfT8BGwgWEK4GhR42",
+  },
+  mode: "development",
+});
 ws_main(io);
